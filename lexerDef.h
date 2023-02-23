@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 enum E_TOKEN
 {
     INTEGER = 1,
@@ -76,6 +73,7 @@ struct TOKEN
     int valueifInt;
 };
 
-int main()
-{
-}
+struct token_list{
+    struct TOKEN token;
+    struct token_list *next;
+};
