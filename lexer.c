@@ -36,6 +36,70 @@ int main(int argc, char *argv[]){
     }
 
 }
+void removeComments(char *inFile,char *cleanFile)
+{
+    FILE* input=fopen(inFile,"r");
+    if(input == NULL)
+    {
+        printf("Input File does not exist\n");
+        exit(0);
+    }
+
+    FILE* out=fopen(cleanFile,"w");
+    if(out == NULL)
+    {
+        printf("Output File does not exist\n");
+        exit(0);
+    }
+
+    
+    int inCom=0;  
+    char c=fgetc(input);  
+    while(c != EOF)
+    {        
+        if(inCom==0)
+        {            
+            if(c!='*')
+            {
+                
+                fputc(c,out);
+                c=fgetc(input);
+            }
+            else
+            {
+                c=fgetc(input);
+                if(c=='*')
+                {
+                    inCom=1;
+                }
+                else
+                fputc('*',out);
+            }
+        }
+        else
+        {
+            if(c=='\n')
+            {
+                fputc(c,out);
+                c=fgetc(input);
+            }
+            else if(c=='*')
+            {
+                c=fgetc(input);
+                if(c=='*')
+                {
+                    c=fgetc(input);
+                    inCom=0;
+                }
+            }
+            else
+            c=fgetc(input);
+        }
+    }
+    fclose(input);
+    fclose(out);
+    return 0;
+}
     
 
 
