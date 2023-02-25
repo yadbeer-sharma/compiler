@@ -77,3 +77,17 @@ struct token_list{
     struct TOKEN token;
     struct token_list *next;
 };
+
+char lt5[11][5] = {
+    "OF", "IN", "OR", "END", 
+    "USE", "FOR", "AND", "REAL", 
+    "WITH", "CASE", "TRUE"
+    };
+char eq5[8][6] = {
+    "ARRAY", "START", "PRINT", "TAKES", 
+    "INPUT", "BREAK", "WHILE", "FALSE"
+    };
+char gt5[11][11]= {"INTEGER", "BOOLEAN", "DECLARE", "MODULE",
+    "DRIVER", "PROGRAM", "GET_VALUE", "PARAMETERS", 
+    "RETURNS", "SWITCH", "DEFAULT"
+    };
