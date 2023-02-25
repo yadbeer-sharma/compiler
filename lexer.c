@@ -192,7 +192,7 @@ struct TOKEN getNextToken()
         if (twinBuff[index][buffIndex] == EOF)
             break;
 
-        char c = twinBuff[index][buffIndex++];
+        char c = twinBuff[index][buffIndex];
         switch (state)
         {
         case 0: // start state
@@ -252,7 +252,7 @@ struct TOKEN getNextToken()
                 lexeme[lexIndex++] = c;
             }
 
-            else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+            else if (isalpha(c))
             {
                 state = 301;
                 lexeme[lexIndex++] = c;
@@ -262,7 +262,7 @@ struct TOKEN getNextToken()
                 state = 302;
                 lexeme[lexIndex++] = c;
             }
-            else if (c >= '0' && c <= '9')
+            else if (isdigit(c))
             {
                 state = 201;
                 lexeme[lexIndex++] = c;
@@ -286,6 +286,10 @@ struct TOKEN getNextToken()
             {
                 state = 500;
                 lexeme[lexIndex++] = c;
+            }
+            else if(c == '\n')
+            {
+                lnNum++;
             }
 
             break;
@@ -314,8 +318,8 @@ struct TOKEN getNextToken()
                 state = 3;
             else
             {
-                if (c == '\n')
-                    lnNum++;
+                // if (c == '\n')
+                //     lnNum++;
                 state = 2;
             }
             break;
@@ -376,14 +380,14 @@ struct TOKEN getNextToken()
             return genToken(lexeme, BC, lnNum);
             break;
         case 201:
-            if (c >= '0' && c <= '9')
+            if (isdigit(c))
                 lexeme[lexIndex++] = c;
             else if (c == '.')
             {
                 lexeme[lexIndex++] = c;
                 state = 203;
             }
-            else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_')
+            else if (isalpha(c) || c == '_')
             {
                 lexeme[lexIndex++] = c;
                 state = 299; // TODO error type T1
@@ -404,7 +408,7 @@ struct TOKEN getNextToken()
                 lexeme[lexIndex++] = c;
                 state = 204;
             }
-            else if (c >= '0' && c <= '9')
+            else if (isdigit(c))
             {
                 lexeme[lexIndex++] = c;
                 state = 205;
@@ -423,14 +427,14 @@ struct TOKEN getNextToken()
             return genToken(lexeme, NUM, lnNum);
             break;
         case 205:
-            if (c >= '0' && c <= '9')
+            if (isdigit(c))
                 lexeme[lexIndex++] = c;
             else if (c == 'e' || c == 'E')
             {
                 lexeme[lexIndex++] = c;
                 state = 207;
             }
-            else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+            else if (isalpha(c))
             {
                 lexeme[lexIndex++] = c;
                 state = 299; // error type T1
@@ -448,7 +452,7 @@ struct TOKEN getNextToken()
             break;
 
         case 207:
-            if (c >= '0' && c <= '9')
+            if (isdigit(c))
             {
                 lexeme[lexIndex++] = c;
                 state = 208;
@@ -465,9 +469,9 @@ struct TOKEN getNextToken()
             }
             break;
         case 208:
-            if (c >= '0' && c <= '9')
+            if (isdigit(c))
                 lexeme[lexIndex++] = c;
-            else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_')
+            else if (isalpha(c) || c == '_')
             {
                 lexeme[lexIndex++] = c;
                 state = 299; // error type T1
@@ -479,7 +483,7 @@ struct TOKEN getNextToken()
             }
             break;
         case 209:
-            if (c >= '0' && c <= '9')
+            if (isdigit(c))
             {
                 lexeme[lexIndex++] = c;
                 state = 208;
@@ -496,6 +500,11 @@ struct TOKEN getNextToken()
                 state = 251;
                 lexeme[lexIndex++] = c;
             }
+            else
+            {
+                lexeme[lexIndex++] = c;
+                state = 298; // error type T2   
+            }
             break;
         case 251:
             lexeme[lexIndex] = '\0';
@@ -503,9 +512,9 @@ struct TOKEN getNextToken()
             break;
 
         case 301:
-            if ((c >= 'a' && c <= 'z') || (c > 'A' && c <= 'Z'))
+            if (isalpha(c))
                 lexeme[lexIndex++] = c;
-            else if (c == '_' || (c >= '0' && c <= '9'))
+            else if (c == '_' || isdigit(c))
             {
                 lexeme[lexIndex++] = c;
                 state = 302;
@@ -514,7 +523,7 @@ struct TOKEN getNextToken()
                 state = 303;
             break;
         case 302:
-            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_' || (c >= '0' && c <= '9'))
+            if (isalpha(c) || c == '_' || isdigit(c))
                 lexeme[lexIndex++] = c;
             else
                 state = 304;
@@ -625,6 +634,7 @@ struct TOKEN getNextToken()
             break;
         default:
         }
+    buffIndex = buffIndex + 1;
     }
 }
 
