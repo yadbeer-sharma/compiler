@@ -18,7 +18,7 @@ void fillBuff()
     buffIndex = 0;
 }
 
-struct TOKEN genToken(char lexeme[20], int tok,
+struct TOKEN genToken(char lexeme[21], int tok,
                       unsigned int lineno)
 {
     struct TOKEN tk;
@@ -34,7 +34,7 @@ struct TOKEN genToken(char lexeme[20], int tok,
 
 struct TOKEN getNextToken()
 {
-    char lexeme[20];
+    char lexeme[21];
     int state = 0;
     int lexIndex = 0;
     while (1)
@@ -43,7 +43,7 @@ struct TOKEN getNextToken()
             fillBuff();
         if(twinBuff[index][buffIndex] == EOF)
             break;
-            
+
         char c = twinBuff[index][buffIndex++];
         switch (state)
         {
@@ -103,8 +103,9 @@ struct TOKEN getNextToken()
         case 1:
             if (c == '*')
                 state = 3;
-            else
-                state = 2;
+            else{
+                if(c=='\n') lnNum++;
+                state = 2;}
             break;
         case 2:
             buffIndex--;        // RETRACTION
@@ -113,12 +114,14 @@ struct TOKEN getNextToken()
         case 3:
             if (c == '*')
                 state = 4;
+            else if(c=='\n') lnNum++;
             break;
         case 4:
             if (c == '*')
                 state = 0;
-            else
-                state = 3;
+            else{
+                if(c=='\n') lnNum++;
+                state = 3;}
             break;
         case 101: // TK_PLUS
             lexeme[lexIndex] = '\0';
