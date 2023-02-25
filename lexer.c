@@ -489,7 +489,8 @@ struct TOKEN getNextToken()
             break;
         case 303:
             buffIndex--;
-            // TODO  ERROR
+            lexeme[lexIndex] = '\0';
+            return genToken(lexeme, hasher(lexeme), lnNum);
             break;
         case 304:
             buffIndex--;
