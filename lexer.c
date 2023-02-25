@@ -18,7 +18,7 @@ void fillBuff()
     buffIndex = 0;
 }
 
-struct TOKEN genToken(char lexeme[21], int tok,
+struct TOKEN genToken(char lexeme[20], int tok,
                       unsigned int lineno)
 {
     struct TOKEN tk;
@@ -34,7 +34,7 @@ struct TOKEN genToken(char lexeme[21], int tok,
 
 struct TOKEN getNextToken()
 {
-    char lexeme[21];
+    char lexeme[20];
     int state = 0;
     int lexIndex = 0;
     while (1)
@@ -43,7 +43,7 @@ struct TOKEN getNextToken()
             fillBuff();
         if(twinBuff[index][buffIndex] == EOF)
             break;
-
+            
         char c = twinBuff[index][buffIndex++];
         switch (state)
         {
@@ -98,30 +98,38 @@ struct TOKEN getNextToken()
                 state = 1;
                 lexeme[lexIndex++] = c;
             }
+
+            if(c=='>')
+            {
+                state = 400;
+                lexeme[lexIndex++] = c;
+            }
+            if(c=='<')
+            {
+                state = 500;
+                lexeme[lexIndex++] = c;
+            }
             break;
 
         case 1:
             if (c == '*')
                 state = 3;
-            else{
-                if(c=='\n') lnNum++;
-                state = 2;}
+            else
+                state = 2;
             break;
         case 2:
             buffIndex--;        // RETRACTION
-            lexeme[lexIndex] = '\0';
+            lexeme[--lexIndex] = '\0';
             return genToken(lexeme, MUL, lnNum);
         case 3:
             if (c == '*')
                 state = 4;
-            else if(c=='\n') lnNum++;
             break;
         case 4:
             if (c == '*')
                 state = 0;
-            else{
-                if(c=='\n') lnNum++;
-                state = 3;}
+            else
+                state = 3;
             break;
         case 101: // TK_PLUS
             lexeme[lexIndex] = '\0';
@@ -159,6 +167,100 @@ struct TOKEN getNextToken()
             lexeme[lexIndex] = '\0';
             return genToken(lexeme, BC, lnNum);
             break;
+        case 400:
+            if(c=='=')
+            {
+                lexeme[lexIndex++] = c;
+                state = 401;
+            }
+            else if(c=='>')
+            {
+                lexeme[lexIndex++] = c;
+                state = 402;
+            }
+            else
+            {
+                lexeme[lexIndex++] = c;
+                state = 405;
+            }
+            break;
+        case 401:
+            lexeme[lexIndex] = '\0';
+            return genToken(lexeme, GE, lnNum);    
+            break;
+        case 402:
+            if(c=='>')
+            {
+                lexeme[lexIndex++] = c;
+                state = 403;
+            }  
+            else 
+            {
+                lexeme[lexIndex++] = c;
+                state = 404;
+            }  
+            break;
+        case 403:
+            lexeme[lexIndex] = '\0';
+            return genToken(lexeme, DRIVERENDDEF, lnNum);
+            break;
+        case 404:
+            buffIndex--;        // RETRACTION
+            lexeme[--lexIndex] = '\0';
+            return genToken(lexeme,ENDDEF, lnNum);
+            break;
+        case 405:
+            buffIndex--;        // RETRACTION
+            lexeme[--lexIndex] = '\0';
+            return genToken(lexeme,GT, lnNum);
+            break; 
+        case 500:
+            if(c=='=')
+            {
+                lexeme[lexIndex++] = c;
+                state = 501;
+            }
+            else if(c=='<')
+            {
+                lexeme[lexIndex++] = c;
+                state = 502;
+            }
+            else
+            {
+                lexeme[lexIndex++] = c;
+                state = 505;
+            }
+            break;  
+        case 501:
+            lexeme[lexIndex] = '\0';
+            return genToken(lexeme, LE, lnNum);    
+            break;
+        case 502:
+            if(c=='<')
+            {
+                lexeme[lexIndex++] = c;
+                state = 503;
+            }  
+            else 
+            {
+                lexeme[lexIndex++] = c;
+                state = 504;
+            }  
+            break;
+        case 503:
+            lexeme[lexIndex] = '\0';
+            return genToken(lexeme, DRIVERDEF, lnNum);
+            break;
+        case 504:
+            buffIndex--;        // RETRACTION
+            lexeme[--lexIndex] = '\0';
+            return genToken(lexeme,DEF, lnNum);
+            break;    
+        case 505:
+            buffIndex--;        // RETRACTION
+            lexeme[--lexIndex] = '\0';
+            return genToken(lexeme,LT, lnNum);
+            break;    
         default:
         }
     }
