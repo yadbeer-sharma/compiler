@@ -345,7 +345,7 @@ struct TOKEN getNextToken()
         case 204:
             
             lexeme[lexIndex]='\0';
-            return genToken(lexeme,RANGEOP,lnNum);
+            return genToken(lexeme,RANGEOP,lnNum);//////////////
             break;
         case 205:
             if(c>='0' && c<='9')
@@ -355,7 +355,7 @@ struct TOKEN getNextToken()
                 lexeme[lexIndex++] = c;
                 state = 207;
             }
-            else if((c>='a' && c<='z') || (c>='A' && c<='Z') )
+            else if((c>='a' && c<='z') || (c>='A' && c<='Z'))
             {
                 lexeme[lexIndex++] = c;
                 state = 299;                        // error type T1
@@ -371,6 +371,47 @@ struct TOKEN getNextToken()
             lexeme[lexIndex]='\0';
             return genToken(lexeme,RNUM,lnNum);
             break;
+        case 207:
+            if(c>='0' && c<='9')
+            {
+                lexeme[lexIndex++] = c;
+                state = 208;
+            }
+            else if(c=='+' || c=='-')
+            {
+                lexeme[lexIndex++] = c;
+                state = 209;
+            }
+            else
+            {
+                lexeme[lexIndex++] = c;
+                state = 299;
+            }
+        case 208:
+            if(c>='0' && c<='9')
+                lexeme[lexIndex++] = c;
+            else if((c>='a' && c<='z') || (c>='A' && c<='Z') || c=='_' )
+            {
+                lexeme[lexIndex++] = c;
+                state = 299;                        // error type T1
+            }
+            else
+            {
+                lexeme[lexIndex++] = c;
+                state = 206;
+            }
+        case 209:
+            if(c>='0' && c<='9')
+            {
+                lexeme[lexIndex++] = c;
+                state = 208;
+            }
+            else
+            {
+                lexeme[lexIndex++] = c;
+                state = 299;                        // error type T1
+            }
+            
         case 301:
             if((c>='a'&& c<='z')||(c>'A' && c<='Z'))
                 lexeme[lexIndex++] = c;
