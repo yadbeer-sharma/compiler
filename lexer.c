@@ -2,15 +2,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "lexer.h"
 
 // Global Variables Declaration
 FILE *fp;
-int BUFSIZE = 128;
+int BUFSIZE;
 
 int fillBuff(char *twinBuff, int index)
 {
     fread(twinBuff[index], sizeof(char), BUFSIZE, fp);
     return index == 0 ? 1 : 0;
+}
+
+struct TOKEN genToken(char lexeme[20], int tok,
+                   unsigned int lineno,
+                   union valueIfNum valueifInt)
+{
+    struct TOKEN tk;
+    strcpy(tk.lexeme, lexeme);
+    tk.tok = tok;
+    tk.lineno = lineno;
+    tk.valueifInt = valueifInt;
+}
+
+struct TOKEN getNextToken(){
+    
 }
 
 // Driver code
@@ -48,7 +64,6 @@ int main(int argc, char *argv[])
     twinBuff[0] = (char *)malloc(sizeof(char) * BUFSIZE);
     twinBuff[1] = (char *)malloc(sizeof(char) * BUFSIZE);
 }
-
 
 void removeComments(char *inFile, char *cleanFile)
 {

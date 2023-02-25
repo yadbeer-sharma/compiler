@@ -70,7 +70,7 @@ struct TOKEN
     int tok;
     char lexeme[20];
     unsigned int lineno;
-    int valueifInt;
+    union valueIfNum valueifInt;
 };
 
 struct token_list{
