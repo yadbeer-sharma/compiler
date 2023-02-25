@@ -2,12 +2,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "lexer.h"
+
+// int isdigit(char c){
+//     return (c>='0' && c<='9');
+// }
+
+// int isalpha(char c){
+//     return ((c>='a' && c<='z')||(c>='A' && c<='Z'));
+// }
 
 // Global Variables Declaration
 FILE *fp;
 int BUFSIZE;
-int buffIndex, index, lnNum = 1; // buffIndex is index in the buffer, index is which buffer is in use
+int buffIndex, Index, lnNum = 1; // buffIndex is index in the buffer, index is which buffer is in use
 char *twinBuff[2];
 
 int hasher(char lexeme[21])
@@ -160,9 +169,9 @@ int hasher(char lexeme[21])
 
 void fillBuff()
 {
-    index = (index == 0) ? 1 : 0;
-    fread(twinBuff[index], sizeof(char), BUFSIZE - 1, fp);
-    twinBuff[index][BUFSIZE - 1] = EOF;
+    Index = (Index == 0) ? 1 : 0;
+    fread(twinBuff[Index], sizeof(char), BUFSIZE - 1, fp);
+    twinBuff[Index][BUFSIZE - 1] = EOF;
     buffIndex = 0;
 }
 
@@ -189,10 +198,10 @@ struct TOKEN getNextToken()
     {
         if (buffIndex == BUFSIZE - 1)
             fillBuff();
-        if (twinBuff[index][buffIndex] == EOF)
+        if (twinBuff[Index][buffIndex] == EOF)
             break;
 
-        char c = twinBuff[index][buffIndex];
+        char c = twinBuff[Index][buffIndex];
         switch (state)
         {
         case 0: // start state
@@ -633,6 +642,7 @@ struct TOKEN getNextToken()
             return genToken(lexeme, LT, lnNum);
             break;
         default:
+            state = 666;  // TODO unidentified char error
         }
     buffIndex = buffIndex + 1;
     }
@@ -735,5 +745,4 @@ void removeComments(char *inFile, char *cleanFile)
     }
     fclose(input);
     fclose(out);
-    return 0;
 }
