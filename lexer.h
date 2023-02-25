@@ -8,3 +8,5 @@ struct TOKEN genToken(char *lexeme, int tok,
 struct TOKEN getNextToken();
 
 void removeComments(char *testcaseFile, char *cleanFile);
+
+int hasher(char lexeme[20]);

@@ -10,6 +10,117 @@ int BUFSIZE;
 int buffIndex, index, lnNum = 1; // buffIndex is index in the buffer, index is which buffer is in use
 char *twinBuff[2];
 
+int hasher(char lexeme[20]){
+    int a = strlen(lexeme);
+
+    if(a < 5){
+        if(!strcmp(lexeme, "of")){
+            return OF;
+        }
+        else if(!strcmp(lexeme, "in")){
+            return IN;
+        }
+        else if(!strcmp(lexeme, "OR")){
+            return OR;
+        }
+        else if(!strcmp(lexeme, "end")){
+            return END;
+        }
+        else if(!strcmp(lexeme, "use")){
+            return USE;
+        }
+        else if(!strcmp(lexeme, "for")){
+            return FOR;
+        }
+        else if(!strcmp(lexeme, "AND")){
+            return AND;
+        }
+        else if(!strcmp(lexeme, "real")){
+            return REAL;
+        }
+        else if(!strcmp(lexeme, "with")){
+            return WITH;
+        }
+        else if(!strcmp(lexeme, "case")){
+            return CASE;
+        }
+        else if(!strcmp(lexeme, "true")){
+            return TRUE;
+        }
+        else{
+            return ID;
+        }
+    }
+
+    else if(a == 5){
+        if(!strcmp(lexeme, "array")){
+            return ARRAY;
+        }
+        else if(!strcmp(lexeme, "start")){
+            return START;
+        }
+        else if(!strcmp(lexeme, "print")){
+            return PRINT;
+        }
+        else if(!strcmp(lexeme, "takes")){
+            return TAKES;
+        }
+        else if(!strcmp(lexeme, "input")){
+            return INPUT;
+        }
+        else if(!strcmp(lexeme, "break")){
+            return BREAK;
+        }
+        else if(!strcmp(lexeme, "while")){
+            return WHILE;
+        }
+        else if(!strcmp(lexeme, "false")){
+            return FALSE;
+        }
+        else{
+            return ID;
+        }
+    }
+    else{
+        if(!strcmp(lexeme, "integer")){
+            return INTEGER;
+        }
+        else if(!strcmp(lexeme, "declare")){
+            return DECLARE;
+        }
+        else if(!strcmp(lexeme, "boolean")){
+            return BOOLEAN;
+        }
+        else if(!strcmp(lexeme, "module")){
+            return MODULE;
+        }
+        else if(!strcmp(lexeme, "driver")){
+            return DRIVER;
+        }
+        else if(!strcmp(lexeme, "program")){
+            return PROGRAM;
+        }
+        else if(!strcmp(lexeme, "get_value")){
+            return GET_VALUE;
+        }
+        else if(!strcmp(lexeme, "parameters")){
+            return PARAMETERS;
+        }
+        else if(!strcmp(lexeme, "returns")){
+            return RETURNS;
+        }
+        else if(!strcmp(lexeme, "switch")){
+            return SWITCH;
+        }
+        else if(!strcmp(lexeme, "default")){
+            return DEFAULT;
+        }
+        else{
+            return ID;
+        }
+    }
+}
+
 void fillBuff()
 {
     index == 0 ? 1 : 0;
