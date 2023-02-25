@@ -277,6 +277,17 @@ struct TOKEN getNextToken()
                 state = 250;
                 lexeme[lexIndex++] = c;
             }
+            else if (c == '>')
+            {
+                state = 400;
+                lexeme[lexIndex++] = c;
+            }
+            else if (c == '<')
+            {
+                state = 500;
+                lexeme[lexIndex++] = c;
+            }
+
             break;
         case 7:
             if (c == '=')
@@ -436,13 +447,13 @@ struct TOKEN getNextToken()
             return genToken(lexeme, RNUM, lnNum);
             break;
 
-         case 207:
-            if(c>='0' && c<='9')
+        case 207:
+            if (c >= '0' && c <= '9')
             {
                 lexeme[lexIndex++] = c;
                 state = 208;
             }
-            else if(c=='+' || c=='-')
+            else if (c == '+' || c == '-')
             {
                 lexeme[lexIndex++] = c;
                 state = 209;
@@ -454,12 +465,12 @@ struct TOKEN getNextToken()
             }
             break;
         case 208:
-            if(c>='0' && c<='9')
+            if (c >= '0' && c <= '9')
                 lexeme[lexIndex++] = c;
-            else if((c>='a' && c<='z') || (c>='A' && c<='Z') || c=='_' )
+            else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_')
             {
                 lexeme[lexIndex++] = c;
-                state = 299;                        // error type T1
+                state = 299; // error type T1
             }
             else
             {
@@ -468,7 +479,7 @@ struct TOKEN getNextToken()
             }
             break;
         case 209:
-            if(c>='0' && c<='9')
+            if (c >= '0' && c <= '9')
             {
                 lexeme[lexIndex++] = c;
                 state = 208;
@@ -476,7 +487,7 @@ struct TOKEN getNextToken()
             else
             {
                 lexeme[lexIndex++] = c;
-                state = 299;                        // error type T1
+                state = 299; // error type T1
             }
             break;
         case 250:
@@ -518,7 +529,100 @@ struct TOKEN getNextToken()
             lexeme[lexIndex] = '\0';
             return genToken(lexeme, ID, lnNum);
             break;
-
+        case 400:
+            if (c == '=')
+            {
+                lexeme[lexIndex++] = c;
+                state = 401;
+            }
+            else if (c == '>')
+            {
+                lexeme[lexIndex++] = c;
+                state = 402;
+            }
+            else
+            {
+                lexeme[lexIndex++] = c;
+                state = 405;
+            }
+            break;
+        case 401:
+            lexeme[lexIndex] = '\0';
+            return genToken(lexeme, GE, lnNum);
+            break;
+        case 402:
+            if (c == '>')
+            {
+                lexeme[lexIndex++] = c;
+                state = 403;
+            }
+            else
+            {
+                lexeme[lexIndex++] = c;
+                state = 404;
+            }
+            break;
+        case 403:
+            lexeme[lexIndex] = '\0';
+            return genToken(lexeme, DRIVERENDDEF, lnNum);
+            break;
+        case 404:
+            buffIndex--; // RETRACTION
+            lexeme[--lexIndex] = '\0';
+            return genToken(lexeme, ENDDEF, lnNum);
+            break;
+        case 405:
+            buffIndex--; // RETRACTION
+            lexeme[--lexIndex] = '\0';
+            return genToken(lexeme, GT, lnNum);
+            break;
+        case 500:
+            if (c == '=')
+            {
+                lexeme[lexIndex++] = c;
+                state = 501;
+            }
+            else if (c == '<')
+            {
+                lexeme[lexIndex++] = c;
+                state = 502;
+            }
+            else
+            {
+                lexeme[lexIndex++] = c;
+                state = 505;
+            }
+            break;
+        case 501:
+            lexeme[lexIndex] = '\0';
+            return genToken(lexeme, LE, lnNum);
+            break;
+        case 502:
+            if (c == '<')
+            {
+                lexeme[lexIndex++] = c;
+                state = 503;
+            }
+            else
+            {
+                lexeme[lexIndex++] = c;
+                state = 504;
+            }
+            break;
+        case 503:
+            lexeme[lexIndex] = '\0';
+            return genToken(lexeme, DRIVERDEF, lnNum);
+            break;
+        case 504:
+            buffIndex--; // RETRACTION
+            lexeme[--lexIndex] = '\0';
+            return genToken(lexeme, DEF, lnNum);
+            break;
+        case 505:
+            buffIndex--; // RETRACTION
+            lexeme[--lexIndex] = '\0';
+            return genToken(lexeme, LT, lnNum);
+            break;
         default:
         }
     }
