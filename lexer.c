@@ -272,6 +272,11 @@ struct TOKEN getNextToken()
                 state = 5;
                 lexeme[lexIndex++] = c;
             }
+            else if (c== '.')
+            {
+                state = 250;
+                lexeme[lexIndex++] = c;
+            }
             break;
         case 7:
             if (c == '=')
@@ -400,9 +405,11 @@ struct TOKEN getNextToken()
             }
             break;
         case 204:
-
+            buffIndex--;
+            buffIndex--;
             lexeme[lexIndex] = '\0';
-            return genToken(lexeme, RANGEOP, lnNum);
+            lexeme[--lexIndex]='\0';
+            return genToken(lexeme, NUM, lnNum);
             break;
         case 205:
             if (c >= '0' && c <= '9')
@@ -445,6 +452,7 @@ struct TOKEN getNextToken()
                 lexeme[lexIndex++] = c;
                 state = 299;
             }
+            break;
         case 208:
             if(c>='0' && c<='9')
                 lexeme[lexIndex++] = c;
@@ -458,6 +466,7 @@ struct TOKEN getNextToken()
                 lexeme[lexIndex++] = c;
                 state = 206;
             }
+            break;
         case 209:
             if(c>='0' && c<='9')
             {
@@ -469,6 +478,18 @@ struct TOKEN getNextToken()
                 lexeme[lexIndex++] = c;
                 state = 299;                        // error type T1
             }
+            break;
+        case 250:
+            if(c=='.')
+            {
+                state = 251;
+                lexeme[lexIndex++] = c;
+            }
+            break;
+        case 251:
+            lexeme[lexIndex] = '\0';
+            return genToken(lexeme, RANGEOP, lnNum);
+            break;
 
         case 301:
             if ((c >= 'a' && c <= 'z') || (c > 'A' && c <= 'Z'))
