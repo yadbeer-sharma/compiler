@@ -79,15 +79,15 @@ struct token_list{
 };
 
 char lt5[11][5] = {
-    "OF", "IN", "OR", "END", 
-    "USE", "FOR", "AND", "REAL", 
-    "WITH", "CASE", "TRUE"
+    "of", "in", "OR", "end", 
+    "use", "for", "AND", "real", 
+    "with", "case", "true"
     };
 char eq5[8][6] = {
-    "ARRAY", "START", "PRINT", "TAKES", 
-    "INPUT", "BREAK", "WHILE", "FALSE"
+    "array", "start", "print", "takes", 
+    "input", "break", "while", "false"
     };
-char gt5[11][11]= {"INTEGER", "BOOLEAN", "DECLARE", "MODULE",
-    "DRIVER", "PROGRAM", "GET_VALUE", "PARAMETERS", 
-    "RETURNS", "SWITCH", "DEFAULT"
+char gt5[11][11]= {"integer", "boolean", "declare", "module",
+    "driver", "program", "get_value", "parameters", 
+    "returns", "switch", "default"
     };
