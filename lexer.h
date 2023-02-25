@@ -3,8 +3,7 @@
 FILE *getStream(FILE *fp);
 
 struct TOKEN genToken(char *lexeme, int tok,
-                   unsigned int lineno,
-                   union valueIfNum valueifInt);
+                   unsigned int lineno);
 
 struct TOKEN getNextToken();
 

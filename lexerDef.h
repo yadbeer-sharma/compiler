@@ -56,7 +56,8 @@ enum E_TOKEN
     SQBC = 54,
     BO = 55,
     BC = 56,
-    COMMENTMARK = 57
+    COMMENTMARK = 57,
+    ERROR = 58
 };
 
 union valueIfNum
