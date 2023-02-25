@@ -205,7 +205,7 @@ struct TOKEN getNextToken()
             }
             break;
         case 204:
-            buffIndex--;
+            
             lexeme[lexIndex]='\0';
             return genToken(lexeme,RANGEOP,lnNum);
             break;
@@ -224,9 +224,15 @@ struct TOKEN getNextToken()
             }
             else
             {
-                
+                lexeme[lexIndex++] = c;
+                state = 206; 
             }
-
+            break;
+        case 206:
+            buffIndex--;
+            lexeme[lexIndex]='\0';
+            return genToken(lexeme,RNUM,lnNum);
+            break;
         case 301:
             if((c>='a'&& c<='z')||(c>'A' && c<='Z'))
                 lexeme[lexIndex++] = c;
