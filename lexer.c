@@ -10,10 +10,12 @@ int BUFSIZE;
 int buffIndex, index, lnNum = 1; // buffIndex is index in the buffer, index is which buffer is in use
 char *twinBuff[2];
 
-int fillBuff(char *twinBuff)
+void fillBuff()
 {
-    fread(twinBuff[index], sizeof(char), BUFSIZE, fp);
-    return index == 0 ? 1 : 0;
+    index == 0 ? 1 : 0;
+    fread(twinBuff[index], sizeof(char), BUFSIZE-1, fp);
+    twinBuff[index][BUFSIZE-1] = EOF;
+    buffIndex = 0;
 }
 
 struct TOKEN genToken(char lexeme[20], int tok,
@@ -35,8 +37,13 @@ struct TOKEN getNextToken()
     char lexeme[20];
     int state = 0;
     int lexIndex = 0;
-    while (twinBuff[index][buffIndex] != EOF && buffIndex != BUFSIZ - 1)
+    while (1)
     {
+        if (buffIndex==BUFSIZE-1)
+            fillBuff();
+        if(twinBuff[index][buffIndex] == EOF)
+            break;
+            
         char c = twinBuff[index][buffIndex++];
         switch (state)
         {
