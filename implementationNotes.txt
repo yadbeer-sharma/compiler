@@ -2,3 +2,5 @@ Each buffer is of the same size N, and N is usually the size of a disk block,
 e.g., 4096 bytes.
 
 Pg-115 of textbook - Dual Buffer Implementation
+
+https://www.tutorialspoint.com/c_standard_library/c_function_fread.htm
