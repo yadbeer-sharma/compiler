@@ -10,15 +10,163 @@ int BUFSIZE;
 int buffIndex, index, lnNum = 1; // buffIndex is index in the buffer, index is which buffer is in use
 char *twinBuff[2];
 
+int hasher(char lexeme[21])
+{
+    int a = strlen(lexeme);
+
+    if (a < 5)
+    {
+        if (!strcmp(lexeme, "of"))
+        {
+            return OF;
+        }
+        else if (!strcmp(lexeme, "in"))
+        {
+            return IN;
+        }
+        else if (!strcmp(lexeme, "OR"))
+        {
+            return OR;
+        }
+        else if (!strcmp(lexeme, "end"))
+        {
+            return END;
+        }
+        else if (!strcmp(lexeme, "use"))
+        {
+            return USE;
+        }
+        else if (!strcmp(lexeme, "for"))
+        {
+            return FOR;
+        }
+        else if (!strcmp(lexeme, "AND"))
+        {
+            return AND;
+        }
+        else if (!strcmp(lexeme, "real"))
+        {
+            return REAL;
+        }
+        else if (!strcmp(lexeme, "with"))
+        {
+            return WITH;
+        }
+        else if (!strcmp(lexeme, "case"))
+        {
+            return CASE;
+        }
+        else if (!strcmp(lexeme, "true"))
+        {
+            return TRUE;
+        }
+        else
+        {
+            return ID;
+        }
+    }
+
+    else if (a == 5)
+    {
+        if (!strcmp(lexeme, "array"))
+        {
+            return ARRAY;
+        }
+        else if (!strcmp(lexeme, "start"))
+        {
+            return START;
+        }
+        else if (!strcmp(lexeme, "print"))
+        {
+            return PRINT;
+        }
+        else if (!strcmp(lexeme, "takes"))
+        {
+            return TAKES;
+        }
+        else if (!strcmp(lexeme, "input"))
+        {
+            return INPUT;
+        }
+        else if (!strcmp(lexeme, "break"))
+        {
+            return BREAK;
+        }
+        else if (!strcmp(lexeme, "while"))
+        {
+            return WHILE;
+        }
+        else if (!strcmp(lexeme, "false"))
+        {
+            return FALSE;
+        }
+        else
+        {
+            return ID;
+        }
+    }
+    else
+    {
+        if (!strcmp(lexeme, "integer"))
+        {
+            return INTEGER;
+        }
+        else if (!strcmp(lexeme, "declare"))
+        {
+            return DECLARE;
+        }
+        else if (!strcmp(lexeme, "boolean"))
+        {
+            return BOOLEAN;
+        }
+        else if (!strcmp(lexeme, "module"))
+        {
+            return MODULE;
+        }
+        else if (!strcmp(lexeme, "driver"))
+        {
+            return DRIVER;
+        }
+        else if (!strcmp(lexeme, "program"))
+        {
+            return PROGRAM;
+        }
+        else if (!strcmp(lexeme, "get_value"))
+        {
+            return GET_VALUE;
+        }
+        else if (!strcmp(lexeme, "parameters"))
+        {
+            return PARAMETERS;
+        }
+        else if (!strcmp(lexeme, "returns"))
+        {
+            return RETURNS;
+        }
+        else if (!strcmp(lexeme, "switch"))
+        {
+            return SWITCH;
+        }
+        else if (!strcmp(lexeme, "default"))
+        {
+            return DEFAULT;
+        }
+        else
+        {
+            return ID;
+        }
+    }
+}
+
 void fillBuff()
 {
-    index == 0 ? 1 : 0;
-    fread(twinBuff[index], sizeof(char), BUFSIZE-1, fp);
-    twinBuff[index][BUFSIZE-1] = EOF;
+    index = (index == 0) ? 1 : 0;
+    fread(twinBuff[index], sizeof(char), BUFSIZE - 1, fp);
+    twinBuff[index][BUFSIZE - 1] = EOF;
     buffIndex = 0;
 }
 
-struct TOKEN genToken(char lexeme[20], int tok,
+struct TOKEN genToken(char lexeme[21], int tok,
                       unsigned int lineno)
 {
     struct TOKEN tk;
@@ -34,16 +182,16 @@ struct TOKEN genToken(char lexeme[20], int tok,
 
 struct TOKEN getNextToken()
 {
-    char lexeme[20];
+    char lexeme[21];
     int state = 0;
     int lexIndex = 0;
     while (1)
     {
-        if (buffIndex==BUFSIZE-1)
+        if (buffIndex == BUFSIZE - 1)
             fillBuff();
-        if(twinBuff[index][buffIndex] == EOF)
+        if (twinBuff[index][buffIndex] == EOF)
             break;
-            
+
         char c = twinBuff[index][buffIndex++];
         switch (state)
         {
@@ -93,43 +241,87 @@ struct TOKEN getNextToken()
                 state = 109;
                 lexeme[lexIndex++] = c;
             }
-            if (c == '*')
+            else if (c == '*')
             {
                 state = 1;
                 lexeme[lexIndex++] = c;
             }
-
-            if(c=='>')
+            else if (c == '!')
             {
-                state = 400;
+                state = 7;
                 lexeme[lexIndex++] = c;
             }
-            if(c=='<')
+
+            else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
             {
-                state = 500;
+                state = 301;
+                lexeme[lexIndex++] = c;
+            }
+            else if (c == '_')
+            {
+                state = 302;
+                lexeme[lexIndex++] = c;
+            }
+            else if (c >= '0' && c <= '9')
+            {
+                state = 201;
+                lexeme[lexIndex++] = c;
+            }
+            else if (c == '=')
+            {
+                state = 5;
                 lexeme[lexIndex++] = c;
             }
             break;
-
+        case 7:
+            if (c == '=')
+                return genToken(lexeme, NE, lnNum);
+            else
+            {
+                if (c == '\n')
+                    lnNum++;
+            }
+            state = 8; // TODO error
+            break;
+        case 5:
+            if (c == '=')
+                return genToken(lexeme, EQ, lnNum);
+            else
+            {
+                if (c == '\n')
+                    lnNum++;
+            }
+            state = 6; // TODO error
+            break;
         case 1:
             if (c == '*')
                 state = 3;
             else
+            {
+                if (c == '\n')
+                    lnNum++;
                 state = 2;
+            }
             break;
         case 2:
-            buffIndex--;        // RETRACTION
-            lexeme[--lexIndex] = '\0';
+            buffIndex--; // RETRACTION
+            lexeme[lexIndex] = '\0';
             return genToken(lexeme, MUL, lnNum);
         case 3:
             if (c == '*')
                 state = 4;
+            else if (c == '\n')
+                lnNum++;
             break;
         case 4:
             if (c == '*')
                 state = 0;
             else
+            {
+                if (c == '\n')
+                    lnNum++;
                 state = 3;
+            }
             break;
         case 101: // TK_PLUS
             lexeme[lexIndex] = '\0';
@@ -167,100 +359,144 @@ struct TOKEN getNextToken()
             lexeme[lexIndex] = '\0';
             return genToken(lexeme, BC, lnNum);
             break;
-        case 400:
-            if(c=='=')
+        case 201:
+            if (c >= '0' && c <= '9')
+                lexeme[lexIndex++] = c;
+            else if (c == '.')
             {
                 lexeme[lexIndex++] = c;
-                state = 401;
+                state = 203;
             }
-            else if(c=='>')
+            else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_')
             {
                 lexeme[lexIndex++] = c;
-                state = 402;
+                state = 299; // TODO error type T1
+            }
+            else
+            {
+                state = 202;
+            }
+            break;
+        case 202:
+            buffIndex--;
+            lexeme[lexIndex] = '\0';
+            return genToken(lexeme, NUM, lnNum);
+            break;
+        case 203:
+            if (c == '.')
+            {
+                lexeme[lexIndex++] = c;
+                state = 204;
+            }
+            else if (c >= '0' && c <= '9')
+            {
+                lexeme[lexIndex++] = c;
+                state = 205;
             }
             else
             {
                 lexeme[lexIndex++] = c;
-                state = 405;
+                state = 299; // error type T1
             }
             break;
-        case 401:
+        case 204:
+
             lexeme[lexIndex] = '\0';
-            return genToken(lexeme, GE, lnNum);    
+            return genToken(lexeme, RANGEOP, lnNum);
             break;
-        case 402:
-            if(c=='>')
+        case 205:
+            if (c >= '0' && c <= '9')
+                lexeme[lexIndex++] = c;
+            else if (c == 'e' || c == 'E')
             {
                 lexeme[lexIndex++] = c;
-                state = 403;
-            }  
-            else 
-            {
-                lexeme[lexIndex++] = c;
-                state = 404;
-            }  
-            break;
-        case 403:
-            lexeme[lexIndex] = '\0';
-            return genToken(lexeme, DRIVERENDDEF, lnNum);
-            break;
-        case 404:
-            buffIndex--;        // RETRACTION
-            lexeme[--lexIndex] = '\0';
-            return genToken(lexeme,ENDDEF, lnNum);
-            break;
-        case 405:
-            buffIndex--;        // RETRACTION
-            lexeme[--lexIndex] = '\0';
-            return genToken(lexeme,GT, lnNum);
-            break; 
-        case 500:
-            if(c=='=')
-            {
-                lexeme[lexIndex++] = c;
-                state = 501;
+                state = 207;
             }
-            else if(c=='<')
+            else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
             {
                 lexeme[lexIndex++] = c;
-                state = 502;
+                state = 299; // error type T1
             }
             else
             {
                 lexeme[lexIndex++] = c;
-                state = 505;
+                state = 206;
             }
-            break;  
-        case 501:
-            lexeme[lexIndex] = '\0';
-            return genToken(lexeme, LE, lnNum);    
             break;
-        case 502:
-            if(c=='<')
+        case 206:
+            buffIndex--;
+            lexeme[lexIndex] = '\0';
+            return genToken(lexeme, RNUM, lnNum);
+            break;
+
+         case 207:
+            if(c>='0' && c<='9')
             {
                 lexeme[lexIndex++] = c;
-                state = 503;
-            }  
-            else 
+                state = 208;
+            }
+            else if(c=='+' || c=='-')
             {
                 lexeme[lexIndex++] = c;
-                state = 504;
-            }  
+                state = 209;
+            }
+            else
+            {
+                lexeme[lexIndex++] = c;
+                state = 299;
+            }
+        case 208:
+            if(c>='0' && c<='9')
+                lexeme[lexIndex++] = c;
+            else if((c>='a' && c<='z') || (c>='A' && c<='Z') || c=='_' )
+            {
+                lexeme[lexIndex++] = c;
+                state = 299;                        // error type T1
+            }
+            else
+            {
+                lexeme[lexIndex++] = c;
+                state = 206;
+            }
+        case 209:
+            if(c>='0' && c<='9')
+            {
+                lexeme[lexIndex++] = c;
+                state = 208;
+            }
+            else
+            {
+                lexeme[lexIndex++] = c;
+                state = 299;                        // error type T1
+            }
+
+        case 301:
+            if ((c >= 'a' && c <= 'z') || (c > 'A' && c <= 'Z'))
+                lexeme[lexIndex++] = c;
+            else if (c == '_' || (c >= '0' && c <= '9'))
+            {
+                lexeme[lexIndex++] = c;
+                state = 302;
+            }
+            else
+                state = 303;
             break;
-        case 503:
+        case 302:
+            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_' || (c >= '0' && c <= '9'))
+                lexeme[lexIndex++] = c;
+            else
+                state = 304;
+            break;
+        case 303:
+            buffIndex--;
+            // TODO  ERROR
+            break;
+        case 304:
+            buffIndex--;
             lexeme[lexIndex] = '\0';
-            return genToken(lexeme, DRIVERDEF, lnNum);
+            return genToken(lexeme, ID, lnNum);
             break;
-        case 504:
-            buffIndex--;        // RETRACTION
-            lexeme[--lexIndex] = '\0';
-            return genToken(lexeme,DEF, lnNum);
-            break;    
-        case 505:
-            buffIndex--;        // RETRACTION
-            lexeme[--lexIndex] = '\0';
-            return genToken(lexeme,LT, lnNum);
-            break;    
+
         default:
         }
     }
