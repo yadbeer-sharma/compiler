@@ -123,9 +123,9 @@ int hasher(char lexeme[20]){
 
 void fillBuff()
 {
-    index == 0 ? 1 : 0;
-    fread(twinBuff[index], sizeof(char), BUFSIZE-1, fp);
-    twinBuff[index][BUFSIZE-1] = EOF;
+    index = (index == 0) ? 1 : 0;
+    fread(twinBuff[index], sizeof(char), BUFSIZE - 1, fp);
+    twinBuff[index][BUFSIZE - 1] = EOF;
     buffIndex = 0;
 }
 
@@ -150,9 +150,9 @@ struct TOKEN getNextToken()
     int lexIndex = 0;
     while (1)
     {
-        if (buffIndex==BUFSIZE-1)
+        if (buffIndex == BUFSIZE - 1)
             fillBuff();
-        if(twinBuff[index][buffIndex] == EOF)
+        if (twinBuff[index][buffIndex] == EOF)
             break;
 
         char c = twinBuff[index][buffIndex++];
@@ -204,35 +204,52 @@ struct TOKEN getNextToken()
                 state = 109;
                 lexeme[lexIndex++] = c;
             }
-            if (c == '*')
+            else if (c == '*')
             {
                 state = 1;
                 lexeme[lexIndex++] = c;
             }
+            else if (c=='='){
+                state = 5;
+                lexeme[lexIndex++] = c;
+            }
             break;
-
+        case 5 : if(c=='=')
+                    return genToken(lexeme, EQ, lnNum);
+                else {
+                    if(c=='\n') lnNum++;
+                }
+                state = 6; // TODO 
+                break;
         case 1:
             if (c == '*')
                 state = 3;
-            else{
-                if(c=='\n') lnNum++;
-                state = 2;}
+            else
+            {
+                if (c == '\n')
+                    lnNum++;
+                state = 2;
+            }
             break;
         case 2:
-            buffIndex--;        // RETRACTION
+            buffIndex--; // RETRACTION
             lexeme[lexIndex] = '\0';
             return genToken(lexeme, MUL, lnNum);
         case 3:
             if (c == '*')
                 state = 4;
-            else if(c=='\n') lnNum++;
+            else if (c == '\n')
+                lnNum++;
             break;
         case 4:
             if (c == '*')
                 state = 0;
-            else{
-                if(c=='\n') lnNum++;
-                state = 3;}
+            else
+            {
+                if (c == '\n')
+                    lnNum++;
+                state = 3;
+            }
             break;
         case 101: // TK_PLUS
             lexeme[lexIndex] = '\0';
