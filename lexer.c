@@ -182,9 +182,9 @@ struct TOKEN genToken(char lexeme[21], int tok,
     strcpy(tk.lexeme, lexeme);
     tk.tok = tok;
     tk.lineno = lineno;
-    if (tok == 1)
+    if (tok == NUM)
         tk.valueifInt.i = atoi(lexeme);
-    else if (tok == 2)
+    else if (tok == RNUM)
         tk.valueifInt.f = atof(lexeme);
     return tk;
 }
