@@ -198,8 +198,12 @@ struct TOKEN getNextToken()
     {
         if (buffIndex == BUFSIZE - 1)
             fillBuff();
-        if (twinBuff[Index][buffIndex] == EOF)
+        if (twinBuff[Index][buffIndex] == EOF){
+            if(state == 3 || state == 4)   
+                printf("Comment didn't end!\n");    // TODO an error
+            else
             break;
+        }
 
         char c = twinBuff[Index][buffIndex];
         switch (state)
