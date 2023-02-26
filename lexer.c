@@ -296,6 +296,11 @@ struct TOKEN getNextToken()
                 state = 500;
                 lexeme[lexIndex++] = c;
             }
+            else if (c == ':')
+            {
+                state=50;
+                lexeme[lexIndex++] = c;
+            }
             else if(c == '\n')
             {
                 lnNum++;
@@ -351,6 +356,22 @@ struct TOKEN getNextToken()
                     lnNum++;
                 state = 3;
             }
+            break;
+        case 50:
+            if (c == '=')
+            {
+                lexeme[lexIndex++]= c;
+                state = 51;
+            }
+            else
+            {
+                lexeme[lexIndex] = '\0';
+                return genToken(lexeme, COLON, lnNum);
+            }
+            break;
+        case 51:
+            lexeme[lexIndex] = '\0';
+            return genToken(lexeme, ASSIGNOP, lnNum);
             break;
         case 101: // TK_PLUS
             lexeme[lexIndex] = '\0';
