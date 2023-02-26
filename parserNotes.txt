@@ -1,0 +1,29 @@
+A switch statement must have at least one case statement. 
+
+Include unary plus and minus operators for arithmetic expressions. Extend grammar to support + and - with single operand of any number, real number, variable identifier and expressions. Few valid expressions using these unary operators are: +5, -value, -20, +29.5, -30.45, -(a+b), -(20+x) <78 and so on.  
+
+The arithmetic operators * and / have more precedence over + and - 
+
+The logical operators AND and OR are of the same precedence. 
+
+Include boolean constants true and false (in lowercase letters). These can be the operands of any boolean expression. E.g. t:= false AND list[10]+34.5<=newarr[1]; is a valid assignment statement. 
+
+The input statement get_value can read only variable identifier but cannot read any static constant (integer, real or boolean) or any array element. E.g. get_value(A[i]) and get_value(5) are syntactically incorrect (error). 
+
+The output statement print can print variable identifier, a static constant (integer, real, boolean) and an array element as well. E.g. print(a), print(true), print(false), print(5), print(56.34), print(a[4]), print(a[k]) etc. are syntactically correct. However, the expression cannot be used to access an array element while using print statement, e.g. print(A[k*2+m]) is syntactically incorrect.
+
+Array element formation cannot be recursive which means that an array element cannot be used as an index at syntax level. E.g. A[A[i]], A[B[k]], and A[A[i] + 5] etc., are invalid. 
+
+For loop range can have only positive integers as is mentioned in the specifications and cannot use variable identifier names to define the loop range. E.g. for (k in b..10) is a invalid syntax as b is a variable identifier. 
+
+The use of module keyword is essential in function call statement. E.g. [s]:= use module arraySum with parameters A,k; is a valid statement. 
+
+A comment is neither tokenized nor passed to the parser. 
+
+Input parameter list of a module cannot be empty.
+
+Any module not having any statement in it is syntactically correct.
+
+There is no need to create any symbol table for variable identifier during stage 1. However, you must create a hash table for keyword implementation at lexical analysis level.
+
+The null and unit productions are essential part of the grammar and should not be removed. [Refer Backus Naur Form (BNF) Sebesta's book section 3.1.3 or Compiler's textbook section 2.2 for grammar representation]
