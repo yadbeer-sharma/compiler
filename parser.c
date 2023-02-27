@@ -53,7 +53,7 @@ void removeTikona(char* token)
     for(int i = 1; i < len-1; i++){
         tokBufM[i-1] = token[i]; 
     }
-    memset(token, '\0',sizeof(token));
+    memset(token, '\0', strlen(token) * sizeof(char));
     strncpy(token,tokBufM,len-2);   
 }
 
