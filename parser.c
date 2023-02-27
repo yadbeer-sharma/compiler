@@ -66,6 +66,7 @@ int fileNumLines(FILE *fp)
         if(ch=='\n')
             numLines++;
     }
+    fseek(fp, 0, SEEK_SET);
     return numLines;
 }
 
