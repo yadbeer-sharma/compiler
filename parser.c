@@ -39,17 +39,7 @@ int checkNT(char *token)
 
 int main()
 {
-    FILE *gram = fopen("grammar.txt", "r");
-    char ch;
-    int numLines = 1;
-    while (ch != EOF)
-    {
-        ch = fgetc(gram);
-        if (ch = '\n')
-            numLines++;
-    }
-    printf("%d\n", numLines);
-    char* tokBuf;
+   
     NUM_GRAMRULES = numLines;
     int grammar[NUM_GRAMRULES][15];
     for (int i = 0; i < NUM_GRAMRULES; i++)
