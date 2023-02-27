@@ -132,15 +132,15 @@
 <relationalOp> EQ
 <relationalOp> NE
 <declareStmt> DECLARE <idList> COLON <dataType> SEMICOL
-<condionalStmt> SWITCH BO ID BC START <caseStmts><default> END
+<condionalStmt> SWITCH BO ID BC START <caseStmts><defaultNT> END
 <caseStmts> CASE <value> COLON <statements> BREAK SEMICOL <N9> 
 <N9> CASE <value> COLON <statements> BREAK SEMICOL <N9>
 <N9> e
 <value> NUM
 <value> TRUE
 <value> FALSE
-<default> DEFAULT COLON <statements> BREAK SEMICOL
-<default> e
+<defaultNT> DEFAULT COLON <statements> BREAK SEMICOL
+<defaultNT> e
 <iterativeStmt>  FOR BO ID IN <range_for_loop> BC START <statements> END
 <iterativeStmt> WHILE BO <arithmeticOrBooleanExpr> BC START <statements> END
 <index_for_loop> <sign_for_loop><new_index_for_loop>
