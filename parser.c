@@ -41,16 +41,9 @@ int main()
                 F[i][j][k] = -1;
         }
     }
+    
     FILE *gram = fopen("grammar.txt", "r");
     char ch;
-    int numLines = 1;
-    while (ch != EOF)
-    {
-        ch = fegtc(gram);
-        if (ch = '\n')
-            numLines++;
-    }
-    printf("%d\n", numLines);
     char* tokBuf;
     return 0;
 }
