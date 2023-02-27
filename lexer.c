@@ -316,20 +316,21 @@ struct TOKEN getNextToken()
                 return genToken(lexeme, NE, lnNum);
             else
             {
-                if (c == '\n')
-                    lnNum++;
+                state=298;
+                lexeme[lexIndex]='\0';
             }
-            state = 8; // TODO error
+         
             break;
+        
         case 5:
             if (c == '=')
                 return genToken(lexeme, EQ, lnNum);
             else
             {
-                if (c == '\n')
-                    lnNum++;
+                state=298;
+                lexeme[lexIndex]='\0';
             }
-            state = 6; // TODO error
+         
             break;
         case 1:
             if (c == '*')
@@ -544,6 +545,21 @@ struct TOKEN getNextToken()
             lexeme[lexIndex] = '\0';
             return genToken(lexeme, RANGEOP, lnNum);
             break;
+        case 297: //error of type unidentified character
+            lexeme[lexIndex]='\0';
+            return genToken(lexeme, ERROR3, lnNum); 
+            break;
+        case 298:   // error of type a.b or !a or a=b
+            lexeme[lexIndex]='\0';
+            buffIndex--;
+            return genToken(lexeme, ERROR2, lnNum);
+            break;
+        case 299:   // retracting error
+            buffIndex--;
+            lexeme[lexIndex]='\0';
+            return genToken(lexeme, ERROR1, lnNum);
+            break;
+            
 
         case 301:
             if (isalpha(c))
@@ -667,7 +683,8 @@ struct TOKEN getNextToken()
             return genToken(lexeme, LT, lnNum);
             break;
         default:
-            state = 666;  // TODO unidentified char error
+            lexeme[lexIndex++]=c;
+            state = 297;  // TODO unidentified char error
         }
     buffIndex = buffIndex + 1;
     }

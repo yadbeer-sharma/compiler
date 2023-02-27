@@ -134,7 +134,9 @@ enum E_TOKEN
     BO = 55,
     BC = 56,
     COMMENTMARK = 57,
-    ERROR = 58
+    ERROR1 = 58,
+    ERROR2 = 59,
+    ERROR3 = 60
 };
 
 union valueIfNum
