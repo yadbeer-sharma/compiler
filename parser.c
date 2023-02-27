@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "lexer.c"
 
 int NUM_TERM;
 int NUM_NONTERM;
@@ -129,8 +128,12 @@ int main()
         }
         i++;
     }
+
+    for (int i = 0; i < NUM_GRAMRULES; i++)
+        for (int j = 0; j < 15; j++)
+            printf("%d\n",grammar[i][j]);
         
-        fclose(gram);
+    fclose(gram);
   
     int parseTable[NUM_NONTERM][NUM_TERM];
     for(int i =0; i<NUM_NONTERM; i++){
