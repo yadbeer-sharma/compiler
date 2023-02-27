@@ -40,6 +40,8 @@ int checkNT(char *token)
 int main()
 {
    
+    FILE *gram = fopen("grammar.txt", "r");
+    int numLines = fileNumLines(gram);
     NUM_GRAMRULES = numLines;
     int grammar[NUM_GRAMRULES][15];
     for (int i = 0; i < NUM_GRAMRULES; i++)
@@ -56,7 +58,7 @@ int main()
         }
     }
     
-    FILE *gram = fopen("grammar.txt", "r");
+    
      char ch;
      char* tokBuf;
     
