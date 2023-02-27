@@ -236,6 +236,8 @@ struct TOKEN getNextToken()
     int lexIndex = 0;
     while (1)
     {
+        if(lexIndex==20)
+            return genToken(lexeme, ERROR4, lnNum);
         if (buffIndex == BUFSIZE - 1)
             fillBuff();
         if (twinBuff[Index][buffIndex] == EOF){
