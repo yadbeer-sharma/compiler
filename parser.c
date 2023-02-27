@@ -27,6 +27,18 @@ int ifNT(char *token)
 
 int main()
 {
+    FILE *gram = fopen("grammar.txt", "r");
+    char ch;
+    int numLines = 1;
+    while (ch != EOF)
+    {
+        ch = fegtc(gram);
+        if (ch = '\n')
+            numLines++;
+    }
+    printf("%d\n", numLines);
+    char* tokBuf;
+    NUM_GRAMRULES = numLines;
     int grammar[NUM_GRAMRULES][15];
     for (int i = 0; i < NUM_GRAMRULES; i++)
         for (int j = 0; j < 15; j++)
@@ -41,16 +53,10 @@ int main()
                 F[i][j][k] = -1;
         }
     }
-    FILE *gram = fopen("grammar.txt", "r");
-    char ch;
-    int numLines = 1;
-    while (ch != EOF)
-    {
-        ch = fegtc(gram);
-        if (ch = '\n')
-            numLines++;
+    int parseTable[NUM_NONTERM][NUM_TERM];
+    for(int i =0; i<NUM_NONTERM; i++){
+        for(int j = 0; j<NUM_TERM; j++)
+            parseTable[i][j] = -1;
     }
-    printf("%d\n", numLines);
-    char* tokBuf;
     return 0;
 }
