@@ -6,6 +6,18 @@ int NUM_TERM;
 int NUM_NONTERM;
 int NUM_GRAMRULES;
 
+int fileNumLines(FILE *fp)
+{
+    char ch;
+    int numLines = 1;
+    while((ch=fgetc(fp))!=EOF)
+    {
+        if(ch=='\n')
+            numLines++;
+    }
+    return numLines;
+}
+
 int ifNT(char *token)
 {
     if (*token == '<')
@@ -31,7 +43,7 @@ int main()
     }
     FILE *gram = fopen("grammar.txt", "r");
     char ch;
-    int numLines = 0;
+    int numLines = 1;
     while (ch != EOF)
     {
         ch = fegtc(gram);
@@ -39,5 +51,6 @@ int main()
             numLines++;
     }
     printf("%d\n", numLines);
+    char* tokBuf;
     return 0;
 }
