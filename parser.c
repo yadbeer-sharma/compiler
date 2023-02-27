@@ -6,6 +6,17 @@ int NUM_TERM;
 int NUM_NONTERM;
 int NUM_GRAMRULES;
 
+void removeTikona(char* token)
+{
+    int len = strlen(token);
+    char tokBufM[len-2];
+    for(int i = 1; i < len-1; i++){
+        tokBufM[i-1] = token[i]; 
+    }
+    memset(token, '\0',sizeof(token));
+    strncpy(token,tokBufM,len-2);   
+}
+
 int fileNumLines(FILE *fp)
 {
     char ch;
@@ -18,7 +29,7 @@ int fileNumLines(FILE *fp)
     return numLines;
 }
 
-int ifNT(char *token)
+int checkNT(char *token)
 {
     if (*token == '<')
         return 1;
@@ -32,7 +43,7 @@ int main()
     int numLines = 1;
     while (ch != EOF)
     {
-        ch = fegtc(gram);
+        ch = fgetc(gram);
         if (ch = '\n')
             numLines++;
     }
@@ -41,7 +52,7 @@ int main()
     NUM_GRAMRULES = numLines;
     int grammar[NUM_GRAMRULES][15];
     for (int i = 0; i < NUM_GRAMRULES; i++)
-        for (int j = 0; j < 15; j++)
+         for (int j = 0; j < 15; j++)
             grammar[i][j] = -1;
 
     int F[NUM_NONTERM][2][NUM_TERM];
@@ -53,10 +64,9 @@ int main()
                 F[i][j][k] = -1;
         }
     }
-    int parseTable[NUM_NONTERM][NUM_TERM];
-    for(int i =0; i<NUM_NONTERM; i++){
-        for(int j = 0; j<NUM_TERM; j++)
-            parseTable[i][j] = -1;
-    }
+    
+    FILE *gram = fopen("grammar.txt", "r");
+    char ch;
+    char* tokBuf;
     return 0;
 }
