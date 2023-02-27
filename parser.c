@@ -41,6 +41,12 @@ int main()
 {
    
     FILE *gram = fopen("grammar.txt", "r");
+    
+    if (gram == NULL) {
+        printf("Error opening grammar file");
+        return 0;
+    }
+    
     int numLines = fileNumLines(gram);
     NUM_GRAMRULES = numLines;
     int grammar[NUM_GRAMRULES][15];
@@ -59,17 +65,10 @@ int main()
     }
     
     
-     char ch;
-     char* tokBuf;
-    
-    if (gram == NULL) {
-        printf("Error opening grammar file");
-        return 0;
-    }
-    
+    char ch;
     char tokBuf[80];
     int i=0;
-    char ch;
+    
     
     while(fgets(tokBuf,80,gram)!=NULL)
     {
