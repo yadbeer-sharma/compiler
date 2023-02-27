@@ -38,6 +38,18 @@ int checkNT(char *token)
 
 int main()
 {
+    FILE *gram = fopen("grammar.txt", "r");
+    char ch;
+    int numLines = 1;
+    while (ch != EOF)
+    {
+        ch = fegtc(gram);
+        if (ch = '\n')
+            numLines++;
+    }
+    printf("%d\n", numLines);
+    char* tokBuf;
+    NUM_GRAMRULES = numLines;
     int grammar[NUM_GRAMRULES][15];
     for (int i = 0; i < NUM_GRAMRULES; i++)
          for (int j = 0; j < 15; j++)
@@ -72,7 +84,10 @@ int main()
         {
             token = strtok(tokBuf," ");
             if(checkNT(token))
-                grammar[i][j] = hash_nt(removeTikona(token));
+            {
+                removeTikona(token);
+                grammar[i][j] = hash_nt(token);
+            }
             else
                 grammar[i][j] = hash_t(token);
             j++;    
@@ -81,8 +96,11 @@ int main()
     }
         
         fclose(gram);
-        return 0;
-
-}
-    
   
+    int parseTable[NUM_NONTERM][NUM_TERM];
+    for(int i =0; i<NUM_NONTERM; i++){
+        for(int j = 0; j<NUM_TERM; j++)
+            parseTable[i][j] = -1;
+    }
+    return 0;
+}
