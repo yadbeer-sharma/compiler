@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "lexer.c"
 
 int NUM_TERM;
 int NUM_NONTERM;
@@ -43,7 +44,7 @@ int main()
     int numLines = 1;
     while (ch != EOF)
     {
-        ch = fegtc(gram);
+        ch = fgetc(gram);
         if (ch = '\n')
             numLines++;
     }
@@ -66,6 +67,8 @@ int main()
     }
     
     FILE *gram = fopen("grammar.txt", "r");
+     char ch;
+     char* tokBuf;
     
     if (gram == NULL) {
         printf("Error opening grammar file");
