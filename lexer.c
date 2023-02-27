@@ -19,6 +19,46 @@ int BUFSIZE;
 int buffIndex, Index, lnNum = 1; // buffIndex is index in the buffer, index is which buffer is in use
 char *twinBuff[2];
 
+int hash_t_support(char *key, char *T){
+    int ret = 0;
+    for(int i = 0; i < strlen(key); i++){
+		ret += ((T[i % 12]) * (key[i]));
+    }
+    return (ret % 93);
+}
+
+int hash_t(char *terminal){
+    int G[] = {0, 0, 0, 0, 72, 0, 70, 0, 30, 0, 0, 70, 0, 0, 70, 0, 0,
+    40, 53, 0, 64, 84, 57, 50, 89, 31, 0, 46, 65, 80, 0, 0, 55, 66, 77, 20,
+    41, 59, 0, 52, 49, 45, 0, 73, 46, 0, 58, 0, 83, 30, 80, 0, 0, 5, 0, 70,
+    7, 0, 87, 0, 0, 10, 47, 19, 0, 49, 70, 0, 3, 56, 0, 88, 68, 90, 21, 14,
+    17, 0, 37, 78, 31, 12, 61, 60, 39, 0, 56, 0, 73, 81, 51, 51, 0};
+
+    return ((G[hash_t_support(terminal, "vcOr4EuYSHTh")] +
+            G[hash_t_support(terminal, "TUiwsT1ZPoGS")]) % 93) + 1;
+}
+
+int hash_nt_support(char *key, char *T){
+    int ret = 0;
+    for(int i = 0; i < strlen(key); i++){
+		ret += ((T[i % 23]) * (key[i]));
+    }
+    return (ret % 132);
+}
+
+int hash_nt(char *nonterminal){
+    int G[] = {0, 0, 8, 0, 0, 0, 0, 0, 0, 111, 0, 112, 2, 0, 0, 0, 0,
+    0, 0, 0, 52, 0, 75, 0, 51, 0, 0, 28, 104, 1, 49, 120, 60, 78, 116, 0,
+    0, 0, 0, 0, 124, 0, 0, 0, 0, 88, 56, 17, 0, 0, 36, 0, 0, 123, 19, 71,
+    1, 122, 54, 0, 81, 0, 0, 0, 0, 0, 68, 86, 44, 0, 69, 47, 13, 38, 130,
+    0, 0, 108, 40, 9, 54, 58, 63, 0, 27, 93, 0, 0, 66, 48, 23, 56, 59, 19,
+    0, 0, 11, 70, 0, 0, 72, 40, 0, 0, 0, 63, 12, 100, 0, 8, 35, 96, 53,
+    121, 0, 0, 3, 15, 92, 25, 59, 10, 16, 5, 96, 103, 0, 0, 0, 0, 72, 43};
+
+    return (G[hash_nt_support(nonterminal, "yOzNiJRcultDp3eXsJ54dXv")] +
+            G[hash_nt_support(nonterminal, "cv6IVed9rCV8WdjSNjXVBPv")]) % 132 + 70;
+}
+
 int hasher(char lexeme[21])
 {
     int a = strlen(lexeme);
