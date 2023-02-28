@@ -11,7 +11,6 @@ int fileNumLines(FILE *fp);
 int checkNT(char *token);
 struct treeNode gentreeNode(struct treeNode * sibling,
     struct treeNode * child,
-    int key,
     int lnNum,
     char lexeme[21],
     union valueIfNumber v,

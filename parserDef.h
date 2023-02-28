@@ -3,7 +3,6 @@
 struct treeNode{
     struct treeNode * sibling;
     struct treeNode * child;
-    int key;
     int lnNum;
     char lexeme[21];
     union valueIfNum v;
