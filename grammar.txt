@@ -86,11 +86,9 @@
 <anyTerm> <boolConstt>
 <N8> <relationalOp> <arithmeticExpr>
 <N8> e
-<arithmeticExpr> <arithmeticExpr> <op1> <term>
 <arithmeticExpr> <term> <N4>
 <N4> <op1> <term> <N4>
 <N4> e
-<term> <term> <op2> <factor>
 <term> <factor> <N5>
 <N5> <op2> <factor> <N5>
 <N5> e
