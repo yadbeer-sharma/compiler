@@ -99,9 +99,6 @@
 <factor> ID <N_11>
 <N_11> SQBO <ele_idx_w_exp> SQBC
 <N_11> e
-<ele_idx_w_exp> <sign> <new_index>
-<ele_idx_w_exp> <arrExpr>
-<ele_idx_w_exp> <sign> BO <arrExpr> BC
 <arrExpr> <arrTerm> <arr_N4>
 <arr_N4> <op1> <arrTerm> <arr_N4>
 <arr_N4> e
