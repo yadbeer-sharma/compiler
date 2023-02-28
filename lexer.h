@@ -9,4 +9,4 @@ struct TOKEN getNextToken();
 
 void removeComments(char *testcaseFile, char *cleanFile);
 
-int hasher(char lexeme[20]);
+int hasher(char lexeme[21]);

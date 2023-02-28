@@ -196,13 +196,14 @@ struct TOKEN getNextToken()
     int lexIndex = 0;
     while (1)
     {
+        if(lexIndex==20)
+            return genToken(lexeme, ERROR4, lnNum);
         if (buffIndex == BUFSIZE - 1)
             fillBuff();
         if (twinBuff[Index][buffIndex] == EOF){
             if(state == 3 || state == 4)   
                 printf("Comment didn't end!\n");    // TODO an error
-            else
-            break;
+            return genToken(lexeme, -1, lnNum);
         }
 
         char c = twinBuff[Index][buffIndex];
