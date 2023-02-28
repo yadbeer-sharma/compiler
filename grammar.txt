@@ -79,7 +79,6 @@
 <var_id_num> RNUM
 <unaryOp> PLUS
 <unaryOp> MINUS
-<anyTerm> <boolConstt>
 <arithmeticOrBooleanExpr> <anyTerm> <N7>
 <N7> <logicalOp> <anyTerm> <N7>
 <N7> e
