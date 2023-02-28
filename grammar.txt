@@ -137,6 +137,7 @@
 <defaultNT> e
 <iterativeStmt> FOR BO ID IN <range_for_loop> BC START <statements> END
 <iterativeStmt> WHILE BO <arithmeticOrBooleanExpr> BC START <statements> END
+<range_for_loop> <index_for_loop> RANGOP <index_for_loop>
 <index_for_loop> <sign_for_loop> <new_index_for_loop>
 <new_index_for_loop> NUM
 <sign_for_loop> PLUS
