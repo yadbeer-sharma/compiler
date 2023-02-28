@@ -153,7 +153,7 @@ void parseInputSourceCode(char *testcaseFile, int *parseTable[])
     stEle2.nodeAddr = tn;
     int lineNum = 0;
     struct TOKEN tk2;
-    tk2.tok = 126;
+    tk2.tok = program;
     tk2.lineno = 0;
     stEle2.tok = tk2;
     struct stack *s = (struct stack *)malloc(sizeof(struct stack));
