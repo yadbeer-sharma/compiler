@@ -359,7 +359,7 @@ void first(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rul
                 if(gram[curr_rule][j]==-1)
                 break;
 
-                if(fcal[gram[curr_rule][j]]==-1)
+                if(fcal[gram[curr_rule][j]]==0)
                 first(f,gram,rule_index,fcal,gram[curr_rule][j]);
 
                 if(f[gram[curr_rule][j]][0][62]==-1)
