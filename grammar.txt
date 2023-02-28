@@ -92,7 +92,7 @@
 <term> <factor> <N5>
 <N5> <op2> <factor> <N5>
 <N5> e
-<factor> <arithmeticOrBooleanExpr>
+<factor> BO <arithmeticOrBooleanExpr> BC
 <factor> NUM
 <factor> RNUM
 <factor> <boolConstt>
