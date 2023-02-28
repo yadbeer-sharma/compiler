@@ -289,7 +289,13 @@ void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int ru
 
         if(gram[x][y+1]==-1)
         {
-            is_equal(f,gram[rule_index[inde][0][i]][0],inde);
+            if(fcal[gram[x][0]]==0)
+                follow(f,gram,rule_index,fcal,gram[x][0]);
+            for(int k=0;k<NUM_TERM;k++)
+            {
+                if(f[gram[x][0]][1][k]==1)
+                f[inde][1][k]=1;
+            }
         }
         else
         {
