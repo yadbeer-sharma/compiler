@@ -685,7 +685,7 @@ struct TOKEN getNextToken()
             break;
         default:
             lexeme[lexIndex++]=c;
-            state = 297;  // TODO unidentified char error
+            state = 297; 
         }
     buffIndex = buffIndex + 1;
     }

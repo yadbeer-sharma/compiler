@@ -7,9 +7,8 @@ struct treeNode{
     int lnNum;
     char lexeme[21];
     union valueIfNum v;
-    int isLeafNode;
-    char* symbol;
-    char* parentSymbol;
+    int symbol;
+    int parentSymbol;
 };
 
 struct stackElement{
@@ -18,7 +17,7 @@ struct stackElement{
 };
 
 struct stackNode{
-    struct stackElement stEle;
+    struct stackElement ele;
     struct stackNode* next;
 };
 

@@ -15,12 +15,11 @@ struct treeNode gentreeNode(struct treeNode * sibling,
     int lnNum,
     char lexeme[21],
     union valueIfNumber v,
-    int isLeafNode,
     char* symbol,
     char* parentSymbol);
 
 struct stack createStack();
 int isEmpty(struct stack s);
-struct stack push(struct stackEle ele, struct stack s);
+struct stack push(struct stackElement e, struct stack s);
 struct stack pop(struct stack s);
-struct stackEle top(struct stack s);
+struct stackElement top(struct stack s);

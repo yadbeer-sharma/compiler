@@ -3,10 +3,19 @@
 #include <string.h>
 #include "parserDef.h"
 #include "parser.h"
+#include "lexer.c"
 
 int NUM_TERM;
 int NUM_NONTERM;
 int NUM_GRAMRULES;
+int *grammar[];
+int isTerm(struct TOKEN tk)
+{
+    if (tk.tok >= 1 && tk.tok <= 61)
+        return 1;
+    else
+        return 0;
+}
 
 struct stack createStack()
 {
@@ -24,8 +33,8 @@ int isEmpty(struct stack s)
 struct stack push(struct stackElement e, struct stack s)
 {
     struct stack s1;
-    s1.top = (struct stackNode*)malloc(sizeof(struct stackNode));
-    s1.top->stEle = e;
+    s1.top = (struct stackNode *)malloc(sizeof(struct stackNode));
+    s1.top->ele = e;
     s1.top->next = s.top;
     s1.size = s.size + 1;
     return s1;
@@ -33,13 +42,13 @@ struct stack push(struct stackElement e, struct stack s)
 
 struct stackElement top(struct stack s)
 {
-    return s.top->stEle;
+    return s.top->ele;
 }
 
 struct stack pop(struct stack s)
 {
     struct stack s1;
-    struct stackNode* temp;
+    struct stackNode *temp;
     temp = s.top;
     s1.top = s.top->next;
     s1.size = s.size - 1;
@@ -128,6 +137,110 @@ int checkNT(char *token)
     return 0;
 }
 
+void parseInputSourceCode(char *testcaseFile, int *parseTable[])
+{
+    FILE *fp = fopen(testcaseFile, "r");
+    struct TOKEN currTok;
+    struct stack s1 = createStack();
+    struct stackElement stEle;
+    stEle.nodeAddr = NULL;
+    struct TOKEN tk;
+    tk.tok = -2;
+    stEle.tok = tk;
+    struct stack s2 = push(stEle, s1);
+    struct stackElement stEle2;
+    struct treeNode *tn = (struct treeNode *)malloc(sizeof(struct treeNode));
+    stEle2.nodeAddr = tn;
+    int lineNum = 0;
+    struct TOKEN tk2;
+    tk2.tok = 126;
+    tk2.lineno = 0;
+    stEle2.tok = tk2;
+    struct stack *s = (struct stack *)malloc(sizeof(struct stack));
+    *s = push(stEle2, s2);
+    while (1)
+    {
+        currTok = getNextToken();
+        if (currTok.tok == -1 && (top(*s)).tok.tok != -2)
+        {
+            // TODO error : input is consumed but stack is not empty
+        }
+        else
+            return; // TODO end of lexical analysis
+        if (currTok.tok == ERROR1 || currTok.tok == ERROR2 || currTok.tok == ERROR3 || currTok.tok == ERROR4)
+        {
+            // TODO error handling
+        }
+        else
+        {
+            struct stackElement tp = top(*s);
+            if (tp.tok.tok == 62)
+                *s = pop(*s);
+            else if (isTerm(tp.tok))
+            {
+                if (currTok.tok == tp.tok.tok)
+                {
+                    *s = pop(*s);
+                    strcpy(tp.nodeAddr->lexeme, currTok.lexeme);
+                    lineNum = currTok.lineno;
+                    if(currTok.tok==NUM)
+                        tp.nodeAddr->v.i = atoi(currTok.lexeme);
+                    else if(currTok.tok==RNUM)
+                        tp.nodeAddr->v.f = ator(currTok.lexeme);
+                    /* struct treeNode * tn = (struct treeNode*) malloc(sizeof(struct treeNode));
+                    tn->isLeafNode = 1;
+                    tn->key = tp.tok.tok;
+                    strcpy(tn->lexeme, tp.tok.lexeme);
+                    tn->lnNum = tp.tok.lineno;
+                    tn->symbol = tp.tok.tok;
+                     */
+                }
+                else
+                {
+                    // TODO terminal mismatch with stack top
+                }
+            }
+            else if (tp.tok.tok == -2)
+            {
+                // TODO error : stack empty but input is not yet consumed
+            }
+            else
+            {
+                if (parseTable[tp.tok.tok][currTok.tok] == -1)
+                {
+                    // TODO error : parseTable entry is empty
+                }
+                else
+                {
+                    int rule = parseTable[tp.tok.tok][currTok.tok];
+                    *s = pop(*s);
+                    struct stackElement *tmp_stele1 = (struct stackElement *)malloc(sizeof(struct stackElement));
+                    // struct TOKEN *tmp_tk1 = (struct TOKEN *)malloc(sizeof(struct TOKEN));
+                    tmp_stele1->tok.tok = grammar[rule][1];
+                    struct treeNode *prev = (struct treeNode *)malloc(sizeof(struct treeNode));
+                    prev->key = grammar[rule][1];
+                    tp.nodeAddr->child = prev;
+                    prev->lnNum = lineNum;
+                    prev->parentSymbol = tp.nodeAddr->symbol;
+                    tmp_stele1->nodeAddr = prev;
+                    *s = push(*tmp_stele1, *s);
+                    for (int i = 2; i < 15; i++)
+                    {
+                        if (grammar[rule][i] == -1)
+                            break;
+                        struct stackElement *tmp_stele = (struct stackElement *)malloc(sizeof(struct stackElement));
+                        // struct TOKEN *tmp_tk = (struct TOKEN *)malloc(sizeof(struct TOKEN));
+                        tmp_stele->tok.tok = grammar[rule][i];
+                        struct treeNode *tmp_tn = (struct treeNode *)malloc(sizeof(struct treeNode));
+                        tmp_stele->nodeAddr = tmp_tn;
+                        // TODO start working from here
+                    }
+                }
+            }
+        }
+    }
+}
+
 int main()
 {
 
@@ -159,31 +272,33 @@ int main()
     char ch;
     char tokBuf[512];
     int i = 0;
-    
-    
-    while(fgets(tokBuf, 512, gram) != NULL)
+
+    while (fgets(tokBuf, 512, gram) != NULL)
     {
-        int j=0;
-        char delim[] = " "; 
+        int j = 0;
+        char delim[] = " ";
 
-        char* token = strtok(tokBuf, delim);
+        char *token = strtok(tokBuf, delim);
 
-        if(checkNT(token)){
-                removeTikona(token);
-                grammar[i][j] = hash_nt(token);
+        if (checkNT(token))
+        {
+            removeTikona(token);
+            grammar[i][j] = hash_nt(token);
         }
-        else{
+        else
+        {
             grammar[i][j] = hash_t(token);
         }
         j++;
 
-        while((token = strtok(NULL," "))!=NULL)
+        while ((token = strtok(NULL, " ")) != NULL)
         {
-            if(token[strlen(token) - 1] == '\n'){
-                    token[strlen(token) - 1] = '\0';
-                }
+            if (token[strlen(token) - 1] == '\n')
+            {
+                token[strlen(token) - 1] = '\0';
+            }
 
-            if(checkNT(token))
+            if (checkNT(token))
             {
                 removeTikona(token);
                 grammar[i][j] = hash_nt(token);
