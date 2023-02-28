@@ -70,7 +70,7 @@ int fileNumLines(FILE *fp)
     return numLines;
 }
 
-int checkNT(char *token)
+int checkTikona(char *token)
 {
     if (*token == '<')
         return 1;
@@ -117,7 +117,7 @@ int main()
 
         char* token = strtok(tokBuf, delim);
 
-        if(checkNT(token)){
+        if(checkTikona(token)){
                 removeTikona(token);
                 grammar[i][j] = hash_nt(token);
         }
@@ -132,7 +132,7 @@ int main()
                     token[strlen(token) - 1] = '\0';
                 }
 
-            if(checkNT(token))
+            if(checkTikona(token))
             {
                 removeTikona(token);
                 grammar[i][j] = hash_nt(token);
@@ -155,5 +155,7 @@ int main()
         for(int j = 0; j<NUM_TERM; j++)
             parseTable[i][j] = -1;
     }
+
+
     return 0;
 }
