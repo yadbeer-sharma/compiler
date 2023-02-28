@@ -207,18 +207,7 @@ int main()
 
     fclose(gram);
 
-<<<<<<< HEAD
-    int parseTable[NUM_NONTERM][NUM_TERM];
-    for (int i = 0; i < NUM_NONTERM; i++)
-    {
-        for (int j = 0; j < NUM_TERM; j++)
-            parseTable[i][j] = -1;
-    }
 
-
-=======
-   
->>>>>>> 8a05c7a422d10455af625d6c8663480f33bfdf66
     return 0;
 }
 
