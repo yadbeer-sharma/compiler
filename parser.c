@@ -157,17 +157,33 @@ int main()
     }
 
     char ch;
-    char tokBuf[80];
+    char tokBuf[512];
     int i = 0;
-
-    while (fgets(tokBuf, 80, gram) != NULL)
+    
+    
+    while(fgets(tokBuf, 512, gram) != NULL)
     {
-        char *token = "init";
-        int j = 0;
-        while (token != NULL)
+        int j=0;
+        char delim[] = " "; 
+
+        char* token = strtok(tokBuf, delim);
+
+        if(checkNT(token)){
+                removeTikona(token);
+                grammar[i][j] = hash_nt(token);
+        }
+        else{
+            grammar[i][j] = hash_t(token);
+        }
+        j++;
+
+        while((token = strtok(NULL," "))!=NULL)
         {
-            token = strtok(tokBuf, " ");
-            if (checkNT(token))
+            if(token[strlen(token) - 1] == '\n'){
+                    token[strlen(token) - 1] = '\0';
+                }
+
+            if(checkNT(token))
             {
                 removeTikona(token);
                 grammar[i][j] = hash_nt(token);

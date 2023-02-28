@@ -9,7 +9,7 @@
 <ret> RETURNS SQBO <output_plist> SQBC SEMICOL
 <ret> e
 <input_plist> ID COLON <dataType> <N1>
-<N1> COMMA ID COLON <dataType> <N1>  
+<N1> COMMA ID COLON <dataType> <N1> 
 <N1> e
 <output_plist> ID COLON <type> <N2>
 <N2> COMMA ID COLON <type><N2>
@@ -27,22 +27,22 @@
 <statement> <declareStmt>
 <statement> <condionalStmt>
 <statement> <iterativeStmt>
-<ioStmt> GET_VALUE BO ID BC SEMICOL 
+<ioStmt> GET_VALUE BO ID BC SEMICOL
 <ioStmt> PRINT BO <varPrint> BC SEMICOL
 <boolConstt> TRUE
-<boolConstt> FALSE 
+<boolConstt> FALSE
 <id_num_rnum> ID
-<id_num_rnum> NUM 
+<id_num_rnum> NUM
 <id_num_rnum> RNUM
 <array_element_for_print> ID SQBO <index_arr> SQBC
-<varPrint> <id_num_rnum> 
-<varPrint> <boolConstt> 
+<varPrint> <id_num_rnum>
+<varPrint> <boolConstt>
 <varPrint> <array_element_for_print>
 <varPrint> ID <p1>
 <varPrint> NUM 
 <varPrint> RNUM 
 <varPrint> <boolConstt>
-<p1> SQBO <new_index> SQBC 
+<p1> SQBO <new_index> SQBC
 <p1> e
 <simpleStmt> <assignmentStmt>
 <simpleStmt> <moduleReuseStmt>
@@ -54,20 +54,20 @@
 <index_arr> <sign> <new_index>
 <new_index> NUM
 <new_index> ID
-<sign> PLUS 
-<sign> MINUS 
+<sign> PLUS
+<sign> MINUS
 <sign> e
 <moduleReuseStmt> <optional> USE MODULE ID WITH PARAMETERS <actual_para_list> SEMICOL
 <actual_para_list> NUM
 <actual_para_list> RNUM
-<actual_para_list> <boolConstt> 
+<actual_para_list> <boolConstt>
 <actual_para_list> ID <N_11>
 <N_11> SQBO <ele_idx_w_exp> SQBC
-<N_11> e 
+<N_11> e
 <optional> SQBO <idList> SQBC ASSIGNOP
 <optional> e
 <idList> ID <N3>
-<N3> COMMA ID <N3> 
+<N3> COMMA ID <N3>
 <N3> e
 <expression> <arithmeticOrBooleanExpr>
 <expression> <U>
@@ -76,7 +76,7 @@
 <new_NT> <var_id_num>
 <var_id_num> ID
 <var_id_num> NUM
-<var_id_num> RNUM   
+<var_id_num> RNUM
 <unaryOp> PLUS
 <unaryOp> MINUS
 <anyTerm> <boolConstt>
@@ -98,11 +98,11 @@
 <factor> <arithmeticOrBooleanExpr>
 <factor> NUM
 <factor> RNUM
-<factor> <boolConstt> 
+<factor> <boolConstt>
 <factor> ID <N_11>
 <N_11> SQBO <ele_idx_w_exp> SQBC
 <N_11> e
-<ele_idx_w_exp>  <sign> <new_index> 
+<ele_idx_w_exp> <sign> <new_index>
 <ele_idx_w_exp> <arrExpr>
 <ele_idx_w_exp> <sign> BO <arrExpr> BC
 <arrExpr> <arrTerm> <arr_N4>
@@ -115,7 +115,7 @@
 <arrFactor> NUM
 <arrFactor> <boolConstt>
 <arrFactor> BO <arrExpr> BC
-<ele_idx_w_exp>  <sign> <N_10>
+<ele_idx_w_exp> <sign> <N_10>
 <ele_idx_w_exp> <arrExpr>
 <N_10> <new_index>
 <N_10> BO <arrExpr> BC
@@ -126,14 +126,14 @@
 <logicalOp> AND
 <logicalOp> OR
 <relationalOp> LT
-<relationalOp> LE 
-<relationalOp> GT 
+<relationalOp> LE
+<relationalOp> GT
 <relationalOp> GE
 <relationalOp> EQ
 <relationalOp> NE
 <declareStmt> DECLARE <idList> COLON <dataType> SEMICOL
 <condionalStmt> SWITCH BO ID BC START <caseStmts><defaultNT> END
-<caseStmts> CASE <value> COLON <statements> BREAK SEMICOL <N9> 
+<caseStmts> CASE <value> COLON <statements> BREAK SEMICOL <N9>
 <N9> CASE <value> COLON <statements> BREAK SEMICOL <N9>
 <N9> e
 <value> NUM
@@ -141,9 +141,9 @@
 <value> FALSE
 <defaultNT> DEFAULT COLON <statements> BREAK SEMICOL
 <defaultNT> e
-<iterativeStmt>  FOR BO ID IN <range_for_loop> BC START <statements> END
+<iterativeStmt> FOR BO ID IN <range_for_loop> BC START <statements> END
 <iterativeStmt> WHILE BO <arithmeticOrBooleanExpr> BC START <statements> END
-<index_for_loop> <sign_for_loop><new_index_for_loop>
+<index_for_loop> <sign_for_loop> <new_index_for_loop>
 <new_index_for_loop> NUM
 <sign_for_loop> PLUS
 <sign_for_loop> MINUS
