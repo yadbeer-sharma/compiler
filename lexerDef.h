@@ -141,11 +141,11 @@ enum E_TOKEN
         e = 62
 };
 
-union valueIfNum
-{ /* usage : valueIfNum v = 25; then use V.i */
-    int i;
-    float f;
-};
+// union valueIfNum
+// { /* usage : valueIfNum v = 25; then use V.i */
+//     int i;
+//     float f;
+// };
 
 struct TOKEN
 {

@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "parserDef.h"
 #include "parser.h"
 #include "lexer.c"
 
@@ -9,6 +8,10 @@ int NUM_TERM = 63;
 int NUM_NONTERM = 143;
 int NUM_GRAMRULES;
 int *grammar[];
+
+void first(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rule_index[NUM_NONTERM][10], int fcal[NUM_NONTERM], int inde);
+void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rule_index[NUM_NONTERM][2][30], int fcal[NUM_NONTERM], int inde);
+
 
 int isTerm(struct TOKEN tk)
 {
@@ -304,7 +307,7 @@ void parseInputSourceCode(char *testcaseFile, int *parseTable[])
         }
     }
 }
-
+/*
 int main()
 {
 
@@ -386,7 +389,7 @@ int main()
     fclose(gram);
     return 0;
 }
-
+*/
 void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NUM_TERM])
 {
     /////////////////// creating grammar index table /////////////////////////////////

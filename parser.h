@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdlib.h>
+#include "parserDef.h"
 
 int hash_t_support(char *key, char *T);
 int hash_t(char *terminal);

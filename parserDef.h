@@ -1,4 +1,10 @@
-#include "lexerDef.h"
+
+union valueIfNum
+{ /* usage : valueIfNum v = 25; then use V.i */
+    int i;
+    float f;
+};
+
 
 struct treeNode{
     struct treeNode * sibling;
