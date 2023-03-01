@@ -319,7 +319,7 @@ int main()
         }
         i++;
     }
-
+    
     for (int i = 0; i < NUM_GRAMRULES; i++)
         for (int j = 0; j < 15; j++)
             printf("%d\n", grammar[i][j]);
