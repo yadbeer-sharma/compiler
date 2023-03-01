@@ -9,6 +9,7 @@ int NUM_TERM = 63;
 int NUM_NONTERM = 143;
 int NUM_GRAMRULES;
 int *grammar[];
+
 int isTerm(struct TOKEN tk)
 {
     if (tk.tok >= 1 && tk.tok <= 61)
@@ -23,6 +24,62 @@ struct stack createStack()
     s.top = NULL;
     s.size = 0;
     return s;
+}
+
+void printNode(struct treeNode *tn, FILE *fp)
+{
+    // lexemeCurrentNode lineno tokenName valueIfNumber
+    // parentNodeSymbol isLeafNode(yes/no) nodeSymbol
+    char *numVal;
+    char *tokenName;
+    char *lexemeCurrentNode;
+    char *parentNodeSymbol = invhash[tn->parentSymbol];
+    char *isLeafNode;
+    char *nodeSymbol = invhash[tn->symbol];
+
+    if (tn->symbol == NUM || tn->symbol == RNUM)
+        numVal = tn->lexeme;
+    else
+        numVal = "----";
+
+    struct TOKEN tk;
+    tk.tok = tn->symbol;
+    if (isTerm(tk))
+    {
+        lexemeCurrentNode = tn->lexeme;
+        tokenName = invhash[tn->symbol];
+        isLeafNode = "Yes";
+    }
+    else
+    {
+        lexemeCurrentNode = "----";
+        tokenName = "----";
+        isLeafNode = "No";
+    }
+
+    int n = tn->lnNum;
+
+    fprintf(fp, "%s,\t%d,\t%s,\t,%s,\t%s,\tisfLeafNode : %s,\t%s\n", lexemeCurrentNode, n, tokenName, numVal, parentNodeSymbol, isLeafNode, nodeSymbol);
+}
+
+void printParseTree(struct treeNode *tn, char *outfile)
+{
+    FILE *fp = fopen(outfile, "w");
+    struct TOKEN tk;
+    tk.tok = tn->symbol;
+    if (isTerm(tk))
+    { // NOTE that for printing leaf node we are checking if it's a terminal or not, and not that it's child is NULL
+        printNode(tn, fp);
+        return;
+    }
+    printParseTree(tn->child, outfile);
+    printNode(tn, fp);
+    struct treeNode *tmp = tn->child->sibling;
+    while (tmp != NULL)
+    {
+        printParseTree(tmp, outfile);
+        tmp = tmp->sibling;
+    }
 }
 
 int isEmpty(struct stack s)
@@ -151,6 +208,7 @@ void parseInputSourceCode(char *testcaseFile, int *parseTable[])
     struct stackElement stEle2;
     struct treeNode *tn = (struct treeNode *)malloc(sizeof(struct treeNode));
     stEle2.nodeAddr = tn;
+    tn->parentSymbol = 143; // for root symbol
     int lineNum = 0;
     struct TOKEN tk2;
     tk2.tok = program;
@@ -186,7 +244,7 @@ void parseInputSourceCode(char *testcaseFile, int *parseTable[])
                     if (currTok.tok == NUM)
                         tp.nodeAddr->v.i = atoi(currTok.lexeme);
                     else if (currTok.tok == RNUM)
-                        tp.nodeAddr->v.f = ator(currTok.lexeme);
+                        tp.nodeAddr->v.f = atof(currTok.lexeme);
                     /* struct treeNode * tn = (struct treeNode*) malloc(sizeof(struct treeNode));
                     tn->isLeafNode = 1;
                     tn->key = tp.tok.tok;
@@ -240,6 +298,7 @@ void parseInputSourceCode(char *testcaseFile, int *parseTable[])
                         prev = tmp_tn;
                         *s = push(*tmp_stele, *s);
                     }
+                    prev->sibling = NULL;
                 }
             }
         }
@@ -325,7 +384,6 @@ int main()
             printf("%d\n", grammar[i][j]);
 
     fclose(gram);
-
     return 0;
 }
 
@@ -404,13 +462,13 @@ void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int ru
 
         if (gram[x][y + 1] == -1)
         {
-            if(gram[x][0]==inde)
+            if (gram[x][0] == inde)
             {
                 continue;
             }
-            if(fcal[gram[x][0]]==0)
-                follow(f,gram,rule_index,fcal,gram[x][0]);
-            for(int k=0;k<NUM_TERM;k++)
+            if (fcal[gram[x][0]] == 0)
+                follow(f, gram, rule_index, fcal, gram[x][0]);
+            for (int k = 0; k < NUM_TERM; k++)
             {
                 if (f[gram[x][0]][1][k] == 1)
                     f[inde][1][k] = 1;
@@ -421,11 +479,11 @@ void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int ru
             int fl_fo = 0;
             for (int j = y + 1; j < 20; j++)
             {
-                if(gram[x][j]==-1)
-                break;
-                if(f[gram[x][j]][0][62]!=-1)
-                fl_fo=1;
-                for(int k=0;k<NUM_TERM;k++)
+                if (gram[x][j] == -1)
+                    break;
+                if (f[gram[x][j]][0][62] != -1)
+                    fl_fo = 1;
+                for (int k = 0; k < NUM_TERM; k++)
                 {
                     if (f[gram[x][j]][0][k] != -1 && k != 62)
                         f[inde][1][k] = 1;

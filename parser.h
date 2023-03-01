@@ -9,13 +9,6 @@ int hash_nt(char *nonterminal);
 void removeTikona(char* token);
 int fileNumLines(FILE *fp);
 int checkNT(char *token);
-struct treeNode gentreeNode(struct treeNode * sibling,
-    struct treeNode * child,
-    int lnNum,
-    char lexeme[21],
-    union valueIfNumber v,
-    char* symbol,
-    char* parentSymbol);
 
 struct stack createStack();
 int isEmpty(struct stack s);
