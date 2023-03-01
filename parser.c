@@ -402,64 +402,70 @@ FILE *gram = fopen("grammar.txt", "r");
 void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NUM_TERM])
 {
     /////////////////// creating grammar index table /////////////////////////////////
+    int nt_rule_count[NUM_NONTERM];    //index to calculate grammar rule index
+    memset(nt_rule_count,0,NUM_NONTERM*sizeof(int));
 
-    int nt_rule_count[NUM_NONTERM]; // index to calculate grammar rule index
-    memset(nt_rule_count, 0, NUM_NONTERM * sizeof(int));
+    
 
-    int rule_index[NUM_NONTERM][10]; // grammar rule index
-    memset(rule_index, -1, NUM_NONTERM * (10 * sizeof(int)));
+    int rule_index[NUM_NONTERM][10];   // grammar rule index
+    memset(rule_index,-1,NUM_NONTERM*(10*sizeof(int)));
 
-    for (int i = 0; i < NUM_GRAMRULES; i++)
+    for(int i=0;i<NUM_GRAMRULES;i++)
     {
-        int temp_nt = gram[i][0];
-        int temp_col_no = nt_rule_count[temp_nt]++;
+        int temp_nt=gram[i][0];
+        int temp_col_no=nt_rule_count[temp_nt]++;
 
-        rule_index[temp_nt][temp_col_no] = i;
+        rule_index[temp_nt][temp_col_no]=i;
     }
     ///////////////////  First set ////////////////////////////////////////////////////
-
-    int fcal[NUM_NONTERM]; // to store which first set have been calculated
-    memset(fcal, 0, NUM_NONTERM * sizeof(int));
-
-    for (int i = 0; i < NUM_GRAMRULES; i++)
+    
+    int fcal[NUM_NONTERM];    //to store which first set have been calculated
+    memset(fcal,0,NUM_NONTERM*sizeof(int));
+    
+    for(int i=0;i < NUM_GRAMRULES; i++)
     {
-        if (fcal[gram[i][0]] == 0)
-            first(f, gram, rule_index, fcal, gram[i][0]);
+        if(fcal[gram[i][0]]==0)
+        first(f,gram,rule_index,fcal,gram[i][0]);
     }
 
     ////////////////// Follow Set /////////////////////////////////////////////////////
 
-    f[gram[0][0]][1][63] = 1; /// $ in follow of start
+    f[gram[0][0]][1][63]=1;  /// $ in follow of start  
 
     ///////////// creating grammar index table for follow /////////////////////////
 
-    memset(nt_rule_count, 0, NUM_NONTERM * sizeof(int));
+    
+     memset(nt_rule_count,0,NUM_NONTERM*sizeof(int));
 
-    int fo_rule_index[NUM_NONTERM][2][30];
-    memset(fo_rule_index, -1, NUM_NONTERM * (2 * (30 * sizeof(int))));
+     int fo_rule_index[NUM_NONTERM][2][30];
+     memset(fo_rule_index,-1,NUM_NONTERM*(2*(30*sizeof(int))));
 
-    for (int i = 0; i < NUM_GRAMRULES; i++)
+     for(int i=0;i<NUM_GRAMRULES;i++)
     {
-        for (int j = 1; j < 15; j++)
+        for(int j=1;j<15;j++)
         {
-            if (gram[i][j] == -1)
-                break;
-            if (gram[i][j] < 70)
-                break;
-            fo_rule_index[gram[i][j]][0][nt_rule_count[gram[i][j]]++] = i;
-            fo_rule_index[gram[i][j]][1][nt_rule_count[gram[i][j]]++] = j;
+            if(gram[i][j]==-1)
+            break;
+            if(gram[i][j]<70)
+            break;
+            fo_rule_index[gram[i][j]][0][nt_rule_count[gram[i][j]]]=i;
+            fo_rule_index[gram[i][j]][1][nt_rule_count[gram[i][j]]++]=j;
         }
     }
-    ////////////////////////////////////////////////////////////////////////////
 
-    int focal[NUM_NONTERM]; // to store which follow set have been calculated
-    memset(fcal, 0, NUM_NONTERM * sizeof(int));
+    
+    
+    ////////////////////////////////////////////////////////////////////////////   
 
-    for (int i = 0; i < NUM_NONTERM; i++)
+     int focal[NUM_NONTERM];    //to store which follow set have been calculated
+     memset(fcal,0,NUM_NONTERM*sizeof(int));
+    
+     for(int i=0;i<NUM_NONTERM;i++)
     {
-        if (focal[i] == 0 && fo_rule_index[i][0][0] != -1)
-            follow(f, gram, fo_rule_index, focal, i);
+        if(focal[i]==0 && fo_rule_index[i][0][0]!=-1)
+        follow(f,gram,fo_rule_index,focal,i);
     }
+    
 }
 
 void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rule_index[NUM_NONTERM][2][30], int fcal[NUM_NONTERM], int inde)
@@ -520,12 +526,13 @@ void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int ru
     fcal[inde] = 1;
 }
 
-void do_union(int f[NUM_NONTERM][2][NUM_TERM], int index_of_rhs, int index_of_lhs, int curr_rule)
+void do_union(int f[NUM_NONTERM][2][NUM_TERM],int index_of_rhs,int index_of_lhs,int curr_rule)
 {
-    for (int i = 0; i < NUM_TERM; i++)
+    for(int i=0;i<NUM_TERM;i++)
     {
-        if (f[index_of_rhs][0][i] != -1)
-            f[index_of_lhs][0][i] = curr_rule;
+        if(f[index_of_rhs][0][i]!=-1)
+        f[index_of_lhs][0][i]=curr_rule;
+        //printf("%d\n",curr_rule);
     }
     return;
 }
