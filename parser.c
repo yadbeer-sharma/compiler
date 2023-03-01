@@ -572,24 +572,24 @@ void first(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rul
 
 void createParseTable(int f[NUM_NONTERM][2][NUM_TERM], int parTab[NUM_NONTERM][NUM_TERM])
 {
-    for (int i = 0; i < NUM_NONTERM; i++)
+    for(int i=0;i<NUM_NONTERM;i++)
     {
-        if (f[i][0][62] == -1)
+        if(f[i][0][62]==-1)
         {
-            for (int j = 0; j < NUM_TERM; j++)
-                parTab[i][j] = f[i][0][j];
+            for(int j=0;j<NUM_TERM;j++)
+            parTab[i][j]=f[i][0][j];
         }
         else
         {
-            int e_rule = f[i][0][62];
+            int e_rule=f[i][0][62];
 
-            for (int j = 0; j < NUM_TERM; j++)
-                if (f[i][0][j] != e_rule)
-                    parTab[i][j] = f[i][0][j];
-
-            for (int j = 0; j < NUM_TERM; j++)
-                if (f[i][1][j] != -1)
-                    parTab[i][j] = e_rule;
+            for(int j=0;j<NUM_TERM;j++)
+            if(f[i][0][j]!=e_rule)
+            parTab[i][j]=f[i][0][j];
+            
+            for(int j=0;j<NUM_TERM;j++)
+            if(f[i][1][j]!=-1)
+            parTab[i][j]=444;
         }
     }
     return;
