@@ -8,17 +8,19 @@ int main(int argc, char *argv[])
 {
     int option=-1;
     
-    printf("Please input option and press enter\n");
-    printf("Option 0: Exit\n");
-    printf("Option 1: Print comment free code\n");
-    printf("Option 2: Print token list\n");
-    printf("Option 3: Print parse tree\n");
-    printf("Option 4: Print time taken to verify the syntactic correctness\n");
-    
     while(option!=0)
     {
+        printf("Please input option and press enter\n");
+        printf("Option 0: Exit\n");
+        printf("Option 1: Print comment free code\n");
+        printf("Option 2: Print token list\n");
+        printf("Option 3: Print parse tree\n");
+        printf("Option 4: Print time taken to verify the syntactic correctness\n");
+        
         scanf("%d",&option);
+        printf("\n");
         switch(option)
+        
         {
             case 0:
                 printf("Successfully exiting\n");
@@ -56,6 +58,7 @@ int main(int argc, char *argv[])
                 struct TOKEN test;
                 for(int i = 0; i < 140; i++){
                     test = getNextToken();
+                    printf("%d  %s  %s\n", test.lineno, test.lexeme, invhash[test.tok]);
                 }
 
                 break;

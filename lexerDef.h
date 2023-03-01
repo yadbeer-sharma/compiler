@@ -147,18 +147,18 @@ enum E_TOKEN
 //     float f;
 // };
 
-struct TOKEN
-{
-    int tok;
-    char lexeme[20];
-    unsigned int lineno;
-    union valueIfNum valueifInt;
-};
+// struct TOKEN
+// {
+//     int tok;
+//     char lexeme[20];
+//     unsigned int lineno;
+//     union valueIfNum valueifInt;
+// };
 
-struct token_list{
-    struct TOKEN token;
-    struct token_list *next;
-};
+// struct token_list{
+//     struct TOKEN token;
+//     struct token_list *next;
+// };
 
 char lt5[11][5] = {
     "of", "in", "OR", "end", 
