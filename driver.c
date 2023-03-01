@@ -28,7 +28,6 @@ int main(int argc, char *argv[])
                 break;
 
             case 1: 
-                
                 if (argc <= 2){
                     printf("Too less arguments! Please provide buffer size and filename\n");
                     exit(0);
@@ -43,7 +42,6 @@ int main(int argc, char *argv[])
                     exit(0);
                 }
                 removeComments(filename, "cleanfile.txt");
-
                 break; 
 
 
