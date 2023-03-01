@@ -244,7 +244,7 @@ void parseInputSourceCode(char *testcaseFile, int *parseTable[])
                     if (currTok.tok == NUM)
                         tp.nodeAddr->v.i = atoi(currTok.lexeme);
                     else if (currTok.tok == RNUM)
-                        tp.nodeAddr->v.f = ator(currTok.lexeme);
+                        tp.nodeAddr->v.f = atof(currTok.lexeme);
                     /* struct treeNode * tn = (struct treeNode*) malloc(sizeof(struct treeNode));
                     tn->isLeafNode = 1;
                     tn->key = tp.tok.tok;
@@ -384,14 +384,6 @@ int main()
             printf("%d\n", grammar[i][j]);
 
     fclose(gram);
-
-    int parseTable[NUM_NONTERM][NUM_TERM];
-    for (int i = 0; i < NUM_NONTERM; i++)
-    {
-        for (int j = 0; j < NUM_TERM; j++)
-            parseTable[i][j] = -1;
-    }
-
     return 0;
 }
 
