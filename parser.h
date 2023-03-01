@@ -21,6 +21,6 @@ struct treeNode gentreeNode(struct treeNode * sibling,
 
 struct stack createStack();
 int isEmpty(struct stack s);
-struct stack push(struct stackEle ele, struct stack s);
+struct stack push(struct stackElement ele, struct stack s);
 struct stack pop(struct stack s);
-struct stackEle top(struct stack s);
+struct stackElement top(struct stack s);
