@@ -415,9 +415,13 @@ void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int ru
 
         if (gram[x][y + 1] == -1)
         {
-            if (fcal[gram[x][0]] == 0)
-                follow(f, gram, rule_index, fcal, gram[x][0]);
-            for (int k = 0; k < NUM_TERM; k++)
+            if(gram[x][0]==inde)
+            {
+                continue;
+            }
+            if(fcal[gram[x][0]]==0)
+                follow(f,gram,rule_index,fcal,gram[x][0]);
+            for(int k=0;k<NUM_TERM;k++)
             {
                 if (f[gram[x][0]][1][k] == 1)
                     f[inde][1][k] = 1;
@@ -428,9 +432,11 @@ void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int ru
             int fl_fo = 0;
             for (int j = y + 1; j < 20; j++)
             {
-                if (f[gram[x][j]][0][62] != -1)
-                    fl_fo = 1;
-                for (int k = 0; k < NUM_TERM; k++)
+                if(gram[x][j]==-1)
+                break;
+                if(f[gram[x][j]][0][62]!=-1)
+                fl_fo=1;
+                for(int k=0;k<NUM_TERM;k++)
                 {
                     if (f[gram[x][j]][0][k] != -1 && k != 62)
                         f[inde][1][k] = 1;
