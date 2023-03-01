@@ -654,5 +654,6 @@ void populateSyncSets(int sync[NUM_NONTERM][NUM_TERM],int f[NUM_NONTERM][2][NUM_
                 sync[i][j] = f[i][1][j];
             }
             sync[i][49]++;//makes the semicol index non-negative (semicol part of sync set for all non terminals)
+            sync[i][12]++;//adding START to sync set of all non-terms
         }
 }
