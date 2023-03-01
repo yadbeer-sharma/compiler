@@ -397,6 +397,12 @@ FILE *gram = fopen("grammar.txt", "r");
     computeFirstAndFollow(grammar, F); 
     
     createParseTable(F,parseTable);
+    for(int i = 0; i < NUM_TERM; i++){
+        for(int j = 0; j < NUM_NONTERM; j++){
+            printf("%d ", parseTable[i][j]);
+        }
+        printf("\n");
+    }
 }
 
 void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NUM_TERM])
