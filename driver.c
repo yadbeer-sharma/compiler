@@ -114,7 +114,8 @@ int main(int argc, char *argv[])
 
                 break;
             case 3:
-                int parsed = parser();
+                strcpy(filename, argv[2]);
+                int parsed = parser(filename);
                 break;
             case 4:
 

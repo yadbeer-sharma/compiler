@@ -7,7 +7,7 @@
 int NUM_TERM = 64;
 int NUM_NONTERM = 143;
 int NUM_GRAMRULES;
-int *grammar[];
+// int *grammar[];
 
 void first(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rule_index[NUM_NONTERM][10], int fcal[NUM_NONTERM], int inde);
 void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rule_index[NUM_NONTERM][2][30], int fcal[NUM_NONTERM], int inde);
@@ -198,8 +198,27 @@ int checkTikona(char *token)
     return 0;
 }
 
-void parseInputSourceCode(char *testcaseFile, int *parseTable[])
+void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TERM], int grammar[NUM_GRAMRULES][15])
 {
+
+        
+/*     for(int i = 0; i < NUM_NONTERM; i++){
+        for(int j = 0; j < NUM_TERM; j++){
+            printf("%d ", parseTable[i][j]);
+        }
+        printf("\n");
+    } */
+        
+    // printf("testcase file is %s\n", testcaseFile);
+
+    /* for(int i = 0; i < NUM_GRAMRULES; i++){
+        for(int j = 0; j < 15; j++){
+            printf("%d ", grammar[i][j]);
+        }
+        printf("\n");
+    } */
+
+
     FILE *fp = fopen(testcaseFile, "r");
     struct TOKEN currTok;
     struct stack s1 = createStack();
@@ -223,8 +242,9 @@ void parseInputSourceCode(char *testcaseFile, int *parseTable[])
     while (1)
     {
         currTok = getNextToken();
+        // printf("%s\n", currTok.lexeme);
         if (currTok.tok == -1 && (top(*s)).tok.tok != -2)
-        {
+        {   
             // TODO error : input is consumed but stack is not empty
         }
         else
@@ -321,9 +341,10 @@ void parseInputSourceCode(char *testcaseFile, int *parseTable[])
             }
         }
     }
+    printParseTree(tn, "outFile.txt");
 }
 
-int parser()
+int parser(char* testcasefile)
 {
 FILE *gram = fopen("grammar.txt", "r");
     
@@ -395,14 +416,17 @@ FILE *gram = fopen("grammar.txt", "r");
     fclose(gram);
 
     computeFirstAndFollow(grammar, F); 
-    
     createParseTable(F,parseTable);
+
+    /* 
     for(int i = 0; i < NUM_TERM; i++){
         for(int j = 0; j < NUM_NONTERM; j++){
             printf("%d ", parseTable[i][j]);
         }
         printf("\n");
-    }
+    } */
+    parseInputSourceCode(testcasefile, parseTable, grammar);
+
 }
 
 void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NUM_TERM])
