@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
 
                 break;
             case 3:
-                //TODO call appropriate parse method
+                int parsed = parser();
                 break;
             case 4:
 

@@ -12,6 +12,7 @@ int *grammar[];
 void first(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rule_index[NUM_NONTERM][10], int fcal[NUM_NONTERM], int inde);
 void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rule_index[NUM_NONTERM][2][30], int fcal[NUM_NONTERM], int inde);
 void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NUM_TERM]);
+void createParseTable(int f[NUM_NONTERM][2][NUM_TERM], int parTab[NUM_NONTERM][NUM_TERM]);
 
 int isTerm(struct TOKEN tk)
 {
@@ -381,7 +382,7 @@ FILE *gram = fopen("grammar.txt", "r");
 
     computeFirstAndFollow(grammar, F); 
     
-    // createParseTable(F,parseTable);
+    createParseTable(F,parseTable);
 }
 
 void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NUM_TERM])
