@@ -9,6 +9,7 @@ int NUM_TERM = 63;
 int NUM_NONTERM = 143;
 int NUM_GRAMRULES;
 int *grammar[];
+
 int isTerm(struct TOKEN tk)
 {
     if (tk.tok >= 1 && tk.tok <= 61)
@@ -23,6 +24,62 @@ struct stack createStack()
     s.top = NULL;
     s.size = 0;
     return s;
+}
+
+void printNode(struct treeNode *tn, FILE *fp)
+{
+    // lexemeCurrentNode lineno tokenName valueIfNumber
+    // parentNodeSymbol isLeafNode(yes/no) nodeSymbol
+    char *numVal;
+    char *tokenName;
+    char *lexemeCurrentNode;
+    char *parentNodeSymbol = " "; // TODO inverse hash
+    char *isLeafNode;
+    char *nodeSymbol = " "; // TODO inverse hash
+
+    if (tn->symbol == NUM || tn->symbol == RNUM)
+        numVal = tn->lexeme;
+    else
+        numVal = "----";
+
+    struct TOKEN tk;
+    tk.tok = tn->symbol;
+    if (isTerm(tk))
+    {
+        lexemeCurrentNode = tn->lexeme;
+        tokenName = " ";
+        isLeafNode = "Yes";
+    } // TODO inverse hash here
+    else
+    {
+        lexemeCurrentNode = "----";
+        tokenName = "----";
+        isLeafNode = "No";
+    }
+
+    int n = tn->lnNum;
+
+    fprintf(fp, "%s,\t%d,\t%s,\t,%s,\t%s,\tisfLeafNode : %s,\t%s\n", lexemeCurrentNode, n, tokenName, numVal, parentNodeSymbol, isLeafNode, nodeSymbol);
+}
+
+void printParseTree(struct treeNode *tn, char *outfile)
+{
+    FILE *fp = fopen(outfile, "w");
+    struct TOKEN tk;
+    tk.tok = tn->symbol;
+    if (isTerm(tk))
+    { // NOTE that for printing leaf node we are checking if it's a terminal or not, and not that it's child is NULL
+        printNode(tn, fp);
+        return;
+    }
+    printParseTree(tn->child, outfile);
+    printNode(tn, fp);
+    struct treeNode *tmp = tn->child->sibling;
+    while (tmp != NULL)
+    {
+        printParseTree(tmp, outfile);
+        tmp = tmp->sibling;
+    }
 }
 
 int isEmpty(struct stack s)
@@ -151,6 +208,7 @@ void parseInputSourceCode(char *testcaseFile, int *parseTable[])
     struct stackElement stEle2;
     struct treeNode *tn = (struct treeNode *)malloc(sizeof(struct treeNode));
     stEle2.nodeAddr = tn;
+    tn->parentSymbol = 11111; // TODO for root symbol
     int lineNum = 0;
     struct TOKEN tk2;
     tk2.tok = 126;
@@ -240,6 +298,7 @@ void parseInputSourceCode(char *testcaseFile, int *parseTable[])
                         prev = tmp_tn;
                         *s = push(*tmp_stele, *s);
                     }
+                    prev->sibling = NULL;
                 }
             }
         }
