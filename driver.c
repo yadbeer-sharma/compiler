@@ -88,8 +88,8 @@ int main(int argc, char *argv[])
                 printf("\n");
 
                 break;
-            case 3:
-                //TODO call appropriate parse method
+            case 3:        
+                int parsed = parser();       
                 break;
             case 4:
 

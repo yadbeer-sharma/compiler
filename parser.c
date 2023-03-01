@@ -11,7 +11,7 @@ int *grammar[];
 
 void first(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rule_index[NUM_NONTERM][10], int fcal[NUM_NONTERM], int inde);
 void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rule_index[NUM_NONTERM][2][30], int fcal[NUM_NONTERM], int inde);
-
+void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NUM_TERM]);
 
 int isTerm(struct TOKEN tk)
 {
@@ -307,23 +307,21 @@ void parseInputSourceCode(char *testcaseFile, int *parseTable[])
         }
     }
 }
-/*
-int main()
+
+int parser()
 {
-
-    FILE *gram = fopen("grammar.txt", "r");
-
-    if (gram == NULL)
-    {
+FILE *gram = fopen("grammar.txt", "r");
+    
+    if (gram == NULL) {
         printf("Error opening grammar file");
         return 0;
     }
-
+    
     int numLines = fileNumLines(gram);
     NUM_GRAMRULES = numLines;
     int grammar[NUM_GRAMRULES][15];
     for (int i = 0; i < NUM_GRAMRULES; i++)
-        for (int j = 0; j < 15; j++)
+         for (int j = 0; j < 15; j++)
             grammar[i][j] = -1;
 
     int F[NUM_NONTERM][2][NUM_TERM];
@@ -335,42 +333,38 @@ int main()
                 F[i][j][k] = -1;
         }
     }
-
+    
     int parseTable[NUM_NONTERM][NUM_TERM];
-    for (int i = 0; i < NUM_NONTERM; i++)
-        for (int j = 0; j < NUM_TERM; j++)
-            parseTable[i][j] = -1;
-
+    for(int i=0;i<NUM_NONTERM;i++)
+    for(int j=0;j<NUM_TERM;j++)
+    parseTable[i][j]=-1;
     char ch;
     char tokBuf[512];
-    int i = 0;
-
-    while (fgets(tokBuf, 512, gram) != NULL)
+    int i=0;
+        
+    while(fgets(tokBuf, 512, gram) != NULL)
     {
-        int j = 0;
-        char delim[] = " ";
+        int j=0;
+        char delim[] = " "; 
 
-        char *token = strtok(tokBuf, delim);
+        char* token = strtok(tokBuf, delim);
 
-        if (checkTikona(token))
-        {
-            removeTikona(token);
-            grammar[i][j] = hash_nt(token);
+        if(checkTikona(token)){
+                removeTikona(token);
+                grammar[i][j] = hash_nt(token);
         }
-        else
-        {
+        else{
             grammar[i][j] = hash_t(token);
         }
         j++;
 
-        while ((token = strtok(NULL, " ")) != NULL)
+        while((token = strtok(NULL," "))!=NULL)
         {
-            if (token[strlen(token) - 1] == '\n')
-            {
-                token[strlen(token) - 1] = '\0';
-            }
+            if(token[strlen(token) - 1] == '\n'){
+                    token[strlen(token) - 1] = '\0';
+                }
 
-            if (checkTikona(token))
+            if(checkTikona(token))
             {
                 removeTikona(token);
                 grammar[i][j] = hash_nt(token);
@@ -382,14 +376,14 @@ int main()
         i++;
     }
     
-    for (int i = 0; i < NUM_GRAMRULES; i++)
-        for (int j = 0; j < 15; j++)
-            printf("%d\n", grammar[i][j]);
 
     fclose(gram);
-    return 0;
+
+    computeFirstAndFollow(grammar, F); 
+    
+    // createParseTable(F,parseTable);
 }
-*/
+
 void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NUM_TERM])
 {
     /////////////////// creating grammar index table /////////////////////////////////
