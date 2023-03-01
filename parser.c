@@ -12,7 +12,7 @@ int NUM_GRAMRULES;
 void first(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rule_index[NUM_NONTERM][10], int fcal[NUM_NONTERM], int inde);
 void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rule_index[NUM_NONTERM][2][30], int fcal[NUM_NONTERM], int inde);
 void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NUM_TERM]);
-void createParseTable(int f[NUM_NONTERM][2][NUM_TERM], int parTab[NUM_NONTERM][NUM_TERM]);
+void createParseTable(int f[NUM_NONTERM][2][NUM_TERM], int parTab[NUM_NONTERM][NUM_TERM],int grammar[NUM_GRAMRULES][15]);
 
 int isTerm(struct TOKEN tk)
 {
@@ -233,7 +233,7 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
     s = push(programNT, s);
 
     // while (1)
-    for(int i = 0; i<30; i++)
+    for(int i = 0; i<47; i++)
     {
         if (isEmpty(s))
             printf("stack is empty!\n");
@@ -271,6 +271,7 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
                 s = pop(s);
             else if (isTerm(tp.tok))
             {
+                printf("Terminam comp: %d %d\n", currTok.tok, tp.tok.tok);
                 if (currTok.tok == tp.tok.tok)
                 {
                     s = pop(s);
@@ -297,6 +298,7 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
             }
             else if (tp.tok.tok == -2)
             {
+                
                 break;
                 // TODO error : stack empty but input is not yet consumed
             }
@@ -306,12 +308,16 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
                 // printf("parseTable entry is : %d\n", parseTable[tp.tok.tok][currTok.tok]);
                 if (parseTable[tp.tok.tok][currTok.tok] == -1)
                 {
+                    printf("%d %d", tp.tok.tok, currTok.tok);
+                    printf("here\n");
                     break;
                     // TODO error : parseTable entry is empty
                 }
                 else
                 {
+
                     int rule = parseTable[tp.tok.tok][currTok.tok];
+                    // printf("top token is :  %s\n", invhash[tp.tok.tok]);
                     printf("rule no is %d\n", rule);
                     s = pop(s);
 
@@ -321,6 +327,7 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
                             break;
                         i--;
                     }
+                    // printf("TO BE PUSHED : %d\n", i);
 
                     while(i>0){
                         struct stackElement *tmp_stele1 = (struct stackElement *)malloc(sizeof(struct stackElement));
@@ -451,7 +458,12 @@ int parser(char *testcasefile)
     fclose(gram);
 
     computeFirstAndFollow(grammar, F);
-    createParseTable(F, parseTable);
+
+    for(int i = 0; i < NUM_TERM; i++){
+        printf("%d %d %d\n", i, F[102][0][i], F[102][1][i]);
+    }
+
+    createParseTable(F, parseTable, grammar);
 
     /*
     for(int i = 0; i < NUM_TERM; i++){
@@ -507,8 +519,7 @@ void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NU
         {
             if (gram[i][j] == -1)
                 break;
-            if (gram[i][j] < 70)
-                break;
+            
             fo_rule_index[gram[i][j]][0][nt_rule_count[gram[i][j]]] = i;
             fo_rule_index[gram[i][j]][1][nt_rule_count[gram[i][j]]++] = j;
         }
@@ -518,7 +529,7 @@ void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NU
 
     int focal[NUM_NONTERM]; // to store which follow set have been calculated
     memset(fcal, 0, NUM_NONTERM * sizeof(int));
-
+    printf("%d \n",fo_rule_index[102][0][0]);
     for (int i = 0; i < NUM_NONTERM; i++)
     {
         if (focal[i] == 0 && fo_rule_index[i][0][0] != -1)
@@ -528,11 +539,21 @@ void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NU
 
 void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rule_index[NUM_NONTERM][2][30], int fcal[NUM_NONTERM], int inde)
 {
+
+    if(inde>=0 && inde <NUM_TERM)
+    {
+        f[inde][1][inde]=1;
+        return;
+    }
     for (int i = 0; i < 30; i++)
     {
+          if(inde==102)
+        printf("hulala");
         if (rule_index[inde][0][i] == -1)
             break;
 
+        if(inde==102)
+        printf("hulala");
         int x = rule_index[inde][0][i];
         int y = rule_index[inde][1][i];
 
@@ -564,7 +585,9 @@ void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int ru
                 if (f[gram[x][j]][0][62] == -1)
                     fl_fo = 0;
                 for (int k = 0; k < NUM_TERM; k++)
-                {
+                {   
+                    if(inde==102)
+                    printf("%d %d\n",x,j);
                     if (f[gram[x][j]][0][k] != -1 && k != 62)
                         f[inde][1][k] = x;
                 }
@@ -643,28 +666,58 @@ void first(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rul
     return;
 }
 
-void createParseTable(int f[NUM_NONTERM][2][NUM_TERM], int parTab[NUM_NONTERM][NUM_TERM])
+void createParseTable(int f[NUM_NONTERM][2][NUM_TERM], int parTab[NUM_NONTERM][NUM_TERM],int grammar[NUM_GRAMRULES][15])
 {
-    for (int i = 0; i < NUM_NONTERM; i++)
+    for(int i=0;i<NUM_GRAMRULES;i++)
     {
-        if (f[i][0][62] == -1)
+        int j=1;
+        int flag=1;
+        while(grammar[i][j]!=-1)
         {
-            for (int j = 0; j < NUM_TERM; j++)
-                parTab[i][j] = f[i][0][j];
+            for(int k=0;k<NUM_TERM;k++)
+            {
+                if(f[grammar[i][j]][0][k]!=-1)
+                parTab[grammar[i][0]][k]=i;
+            }
+            if(f[grammar[i][j]][0][62]!=-1)
+            {
+                j++;
+            }
+            else
+            {
+                flag=0;
+                break;
+            }
         }
-        else
+        if(flag==1)
         {
-            int e_rule = f[i][0][62];
-
-            for (int j = 0; j < NUM_TERM; j++)
-                if (f[i][0][j] != e_rule)
-                    parTab[i][j] = f[i][0][j];
-
-            for (int j = 0; j < NUM_TERM; j++)
-                    parTab[i][j] = f[i][1][j];
+            for(int k=0;k<NUM_TERM;k++)
+            {
+                if(f[grammar[i][0]][1][k]!=-1)
+                parTab[grammar[i][0]][k]=i;
+            }   
         }
     }
-    return;
+//     for (int i = 0; i < NUM_NONTERM; i++)
+//     {
+//         if (f[i][0][62] == -1)
+//         {
+//             for (int j = 0; j < NUM_TERM; j++)
+//                 parTab[i][j] = f[i][0][j];
+//         }
+//         else
+//         {
+//             int e_rule = f[i][0][62];
+
+//             for (int j = 0; j < NUM_TERM; j++)
+//                 if (f[i][0][j] != e_rule)
+//                     parTab[i][j] = f[i][0][j];
+
+//             for (int j = 0; j < NUM_TERM; j++)
+//                     parTab[i][j] = f[i][1][j];
+//         }
+//     }
+//     return;
 }
 
 void populateSyncSets(int sync[NUM_NONTERM][NUM_TERM], int f[NUM_NONTERM][2][NUM_TERM])

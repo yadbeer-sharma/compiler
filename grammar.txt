@@ -9,15 +9,15 @@
 <ret> RETURNS SQBO <output_plist> SQBC SEMICOL
 <ret> e
 <input_plist> ID COLON <dataType> <N1>
-<N1> COMMA ID COLON <dataType> <N1> 
+<N1> COMMA ID COLON <dataType> <N1>
 <N1> e
 <output_plist> ID COLON <type> <N2>
-<N2> COMMA ID COLON <type><N2>
+<N2> COMMA ID COLON <type> <N2>
 <N2> e
 <dataType> INTEGER
 <dataType> REAL
 <dataType> BOOLEAN
-<dataType> ARRAY SQBO <range_arrays> SQBC OF <type> 
+<dataType> ARRAY SQBO <range_arrays> SQBC OF <type>
 <range_arrays> <index_arr> RANGEOP <index_arr>
 <type> INTEGER
 <type> REAL
@@ -39,8 +39,8 @@
 <id_num_rnum> RNUM
 <array_element_for_print> ID SQBO <index_arr> SQBC
 <varPrint> ID <p1>
-<varPrint> NUM 
-<varPrint> RNUM 
+<varPrint> NUM
+<varPrint> RNUM
 <varPrint> <boolConstt>
 <p1> SQBO <new_index> SQBC
 <p1> e
