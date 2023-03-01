@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
         printf("Option 2: Print token list\n");
         printf("Option 3: Print parse tree\n");
         printf("Option 4: Print time taken to verify the syntactic correctness\n");
-        
+        printf("\n");
         scanf("%d",&option);
         printf("\n");
         switch(option)
@@ -42,6 +42,14 @@ int main(int argc, char *argv[])
                     exit(0);
                 }
                 removeComments(filename, "cleanfile.txt");
+                
+                FILE *cleanFile = fopen("cleanfile.txt", "r");
+                char line [1000];
+                while(fgets(line, sizeof(line), cleanFile) != NULL){
+                    fprintf(stdout,"%s",line);
+                }
+                fclose(cleanFile);
+                printf("\n");
                 break; 
 
 
