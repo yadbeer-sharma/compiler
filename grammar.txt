@@ -99,9 +99,6 @@
 <factor> ID <N_11>
 <N_11> SQBO <ele_idx_w_exp> SQBC
 <N_11> e
-<ele_idx_w_exp> <sign> <new_index>
-<ele_idx_w_exp> <arrExpr>
-<ele_idx_w_exp> <sign> BO <arrExpr> BC
 <arrExpr> <arrTerm> <arr_N4>
 <arr_N4> <op1> <arrTerm> <arr_N4>
 <arr_N4> e
@@ -129,7 +126,7 @@
 <relationalOp> EQ
 <relationalOp> NE
 <declareStmt> DECLARE <idList> COLON <dataType> SEMICOL
-<condionalStmt> SWITCH BO ID BC START <caseStmts><defaultNT> END
+<condionalStmt> SWITCH BO ID BC START <caseStmts> <defaultNT> END
 <caseStmts> CASE <value> COLON <statements> BREAK SEMICOL <N9>
 <N9> CASE <value> COLON <statements> BREAK SEMICOL <N9>
 <N9> e
@@ -140,6 +137,7 @@
 <defaultNT> e
 <iterativeStmt> FOR BO ID IN <range_for_loop> BC START <statements> END
 <iterativeStmt> WHILE BO <arithmeticOrBooleanExpr> BC START <statements> END
+<range_for_loop> <index_for_loop> RANGEOP <index_for_loop>
 <index_for_loop> <sign_for_loop> <new_index_for_loop>
 <new_index_for_loop> NUM
 <sign_for_loop> PLUS
