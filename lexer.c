@@ -18,6 +18,7 @@ FILE *fp;
 int BUFSIZE;
 int buffIndex, Index, lnNum = 1; // buffIndex is index in the buffer, index is which buffer is in use
 char *twinBuff[2];
+int didWeReachEnd = 0;
 
 int hasher(char lexeme[21])
 {
@@ -170,7 +171,9 @@ int hasher(char lexeme[21])
 void fillBuff()
 {
     Index = (Index == 0) ? 1 : 0;
-    fread(twinBuff[Index], sizeof(char), BUFSIZE - 1, fp);
+    int charsRead = fread(twinBuff[Index], sizeof(char), BUFSIZE - 1, fp);
+    if (charsRead < BUFSIZE)
+        twinBuff[Index][charsRead] = EOF;
     twinBuff[Index][BUFSIZE - 1] = EOF;
     buffIndex = 0;
 }
@@ -196,15 +199,15 @@ struct TOKEN getNextToken()
     int lexIndex = 0;
     while (1)
     {
-        if(lexIndex==20)
+        if (lexIndex == 20)
             return genToken(lexeme, ERROR4, lnNum);
         if (buffIndex == BUFSIZE - 1)
             fillBuff();
-        if (twinBuff[Index][buffIndex] == EOF){
-            if(state == 3 || state == 4)   
-                printf("Comment didn't end!\n");    // TODO an error
-            return genToken(lexeme, -1, lnNum);
-        }
+        // if (twinBuff[Index][buffIndex] == EOF){
+        //     if(state == 3 || state == 4)
+        //         printf("Comment didn't end!\n");    // TODO an error
+        //     return genToken(lexeme, -1, lnNum);
+        // }
 
         char c = twinBuff[Index][buffIndex];
         switch (state)
@@ -286,7 +289,7 @@ struct TOKEN getNextToken()
                 state = 5;
                 lexeme[lexIndex++] = c;
             }
-            else if (c== '.')
+            else if (c == '.')
             {
                 state = 250;
                 lexeme[lexIndex++] = c;
@@ -303,12 +306,17 @@ struct TOKEN getNextToken()
             }
             else if (c == ':')
             {
-                state=50;
+                state = 50;
                 lexeme[lexIndex++] = c;
             }
-            else if(c == '\n')
+            else if (c == '\n')
             {
                 lnNum++;
+            }
+
+            else if (c == EOF)
+            {
+                return genToken(lexeme, -1, lnNum);
             }
 
             break;
@@ -317,21 +325,21 @@ struct TOKEN getNextToken()
                 return genToken(lexeme, NE, lnNum);
             else
             {
-                state=298;
-                lexeme[lexIndex]='\0';
+                state = 298;
+                lexeme[lexIndex] = '\0';
             }
-         
+
             break;
-        
+
         case 5:
             if (c == '=')
                 return genToken(lexeme, EQ, lnNum);
             else
             {
-                state=298;
-                lexeme[lexIndex]='\0';
+                state = 298;
+                lexeme[lexIndex] = '\0';
             }
-         
+
             break;
         case 1:
             if (c == '*')
@@ -352,6 +360,11 @@ struct TOKEN getNextToken()
                 state = 4;
             else if (c == '\n')
                 lnNum++;
+            else if (c == EOF)
+            {
+                printf("ERROR : COMMENT DOESN'T END\n");
+                return genToken(lexeme, -1, lnNum);
+            }
             break;
         case 4:
             if (c == '*')
@@ -360,13 +373,18 @@ struct TOKEN getNextToken()
             {
                 if (c == '\n')
                     lnNum++;
+                else if (c == EOF)
+                {
+                    printf("ERROR : COMMENT DOESN'T END\n");
+                    return genToken(lexeme, -1, lnNum);
+                }
                 state = 3;
             }
             break;
         case 50:
             if (c == '=')
             {
-                lexeme[lexIndex++]= c;
+                lexeme[lexIndex++] = c;
                 state = 51;
             }
             else
@@ -459,7 +477,7 @@ struct TOKEN getNextToken()
             buffIndex--;
             buffIndex--;
             lexeme[lexIndex] = '\0';
-            lexeme[--lexIndex]='\0';
+            lexeme[--lexIndex] = '\0';
             return genToken(lexeme, NUM, lnNum);
             break;
         case 205:
@@ -531,7 +549,7 @@ struct TOKEN getNextToken()
             }
             break;
         case 250:
-            if(c=='.')
+            if (c == '.')
             {
                 state = 251;
                 lexeme[lexIndex++] = c;
@@ -539,28 +557,27 @@ struct TOKEN getNextToken()
             else
             {
                 lexeme[lexIndex++] = c;
-                state = 298; // error type T2   
+                state = 298; // error type T2
             }
             break;
         case 251:
             lexeme[lexIndex] = '\0';
             return genToken(lexeme, RANGEOP, lnNum);
             break;
-        case 297: //error of type unidentified character
-            lexeme[lexIndex]='\0';
-            return genToken(lexeme, ERROR3, lnNum); 
+        case 297: // error of type unidentified character
+            lexeme[lexIndex] = '\0';
+            return genToken(lexeme, ERROR3, lnNum);
             break;
-        case 298:   // error of type a.b or !a or a=b
-            lexeme[lexIndex]='\0';
+        case 298: // error of type a.b or !a or a=b
+            lexeme[lexIndex] = '\0';
             buffIndex--;
             return genToken(lexeme, ERROR2, lnNum);
             break;
-        case 299:   // retracting error
+        case 299: // retracting error
             buffIndex--;
-            lexeme[lexIndex]='\0';
+            lexeme[lexIndex] = '\0';
             return genToken(lexeme, ERROR1, lnNum);
             break;
-            
 
         case 301:
             if (isalpha(c))
@@ -684,48 +701,48 @@ struct TOKEN getNextToken()
             return genToken(lexeme, LT, lnNum);
             break;
         default:
-            lexeme[lexIndex++]=c;
-            state = 297; 
+            lexeme[lexIndex++] = c;
+            state = 297;
         }
-    buffIndex = buffIndex + 1;
+        buffIndex = buffIndex + 1;
     }
 }
 
 // Driver code
-int main(int argc, char *argv[])
-{
+// int main(int argc, char *argv[])
+// {
 
-    char *filename;
+//     char *filename;
 
-    if (argc <= 2)
-    {
-        printf("Too less arguments! Please provide buffer size and filename\n");
-        exit(0);
-    }
-    else if (argc == 3)
-    {
-        BUFSIZE = atoi(argv[1]);
-        filename = (char *)malloc(strlen(argv[2]));
-        strcpy(filename, argv[2]);
-    }
-    else
-    {
-        printf("Too many arguments!\n");
-        exit(0);
-    }
+//     if (argc <= 2)
+//     {
+//         printf("Too less arguments! Please provide buffer size and filename\n");
+//         exit(0);
+//     }
+//     else if (argc == 3)
+//     {
+//         BUFSIZE = atoi(argv[1]);
+//         filename = (char *)malloc(strlen(argv[2]));
+//         strcpy(filename, argv[2]);
+//     }
+//     else
+//     {
+//         printf("Too many arguments!\n");
+//         exit(0);
+//     }
 
-    fp = fopen(filename, "r");
+//     fp = fopen(filename, "r");
 
-    if (fp == NULL)
-    {
-        printf("File does not exist\n");
-        exit(0);
-    }
+//     if (fp == NULL)
+//     {
+//         printf("File does not exist\n");
+//         exit(0);
+//     }
 
-    char *twinBuff[2];
-    twinBuff[0] = (char *)malloc(sizeof(char) * BUFSIZE);
-    twinBuff[1] = (char *)malloc(sizeof(char) * BUFSIZE);
-}
+//     char *twinBuff[2];
+//     twinBuff[0] = (char *)malloc(sizeof(char) * BUFSIZE);
+//     twinBuff[1] = (char *)malloc(sizeof(char) * BUFSIZE);
+// }
 
 void removeComments(char *inFile, char *cleanFile)
 {
