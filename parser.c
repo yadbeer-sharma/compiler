@@ -5,7 +5,7 @@
 #include "parser.h"
 #include "lexer.c"
 
-int NUM_TERM = 63;
+int NUM_TERM = 64;
 int NUM_NONTERM = 143;
 int NUM_GRAMRULES;
 int *grammar[];
@@ -476,13 +476,17 @@ void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int ru
         }
         else
         {
-            int fl_fo = 0;
+            int fl_fo = 1;
             for (int j = y + 1; j < 20; j++)
             {
+                
+                if(fl_fo==0)
+                    break;
+
                 if (gram[x][j] == -1)
                     break;
-                if (f[gram[x][j]][0][62] != -1)
-                    fl_fo = 1;
+                if (f[gram[x][j]][0][62] == -1)
+                    fl_fo = 0;
                 for (int k = 0; k < NUM_TERM; k++)
                 {
                     if (f[gram[x][j]][0][k] != -1 && k != 62)
@@ -517,46 +521,49 @@ void do_union(int f[NUM_NONTERM][2][NUM_TERM], int index_of_rhs, int index_of_lh
 void first(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rule_index[NUM_NONTERM][10], int fcal[NUM_NONTERM], int inde)
 {
     ///////////base case, when it is a terminal ////////////////
-
-    if (inde < NUM_TERM)
+        
+    
+    if(inde<NUM_TERM && inde>=0)
     {
-        f[inde][0][inde] = 999;
-        fcal[inde] = 1;
+        f[inde][0][inde]=999;
+        fcal[inde]=1;
         return;
     }
     ////////////////////////////////////////////////////////////
-    for (int i = 0; i < 10; i++)
+    for(int i=0;i<10;i++)
     {
-        if (rule_index[inde][i] == -1)
-            break;
+        if(rule_index[inde][i] == -1)
+        break;
         else
         {
-            int curr_rule = rule_index[inde][i];
-            int flag_null = 0;
-            for (int j = 1; j < 15; j++)
+            int curr_rule=rule_index[inde][i];
+
+            int flag_null=0;
+            for(int j=1;j<15;j++)
             {
-                if (gram[curr_rule][j] == -1)
-                    break;
+                if(gram[curr_rule][j]==-1)
+                break;
 
-                if (fcal[gram[curr_rule][j]] == 0)
-                    first(f, gram, rule_index, fcal, gram[curr_rule][j]);
+                if(fcal[gram[curr_rule][j]]==0)
+                first(f,gram,rule_index,fcal,gram[curr_rule][j]);
 
-                if (f[gram[curr_rule][j]][0][62] == -1)
+                if(f[gram[curr_rule][j]][0][62]==-1)
                 {
-                    do_union(f, gram[curr_rule][j], inde, curr_rule);
-                    flag_null = 1;
+                    do_union(f,gram[curr_rule][j],inde,curr_rule);
+                    flag_null=1;
                     break;
                 }
                 else
                 {
-                    do_union(f, gram[curr_rule][j], inde, curr_rule);
+                    do_union(f,gram[curr_rule][j],inde,curr_rule);
                 }
             }
-            if (flag_null == 1)
-                f[inde][0][62] = -1;
+            if(flag_null==1)
+            f[inde][0][62]=-1;
         }
     }
-    fcal[inde] = 1;
+   
+    fcal[inde]=1;
     return;
 }
 
