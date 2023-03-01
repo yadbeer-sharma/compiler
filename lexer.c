@@ -18,6 +18,7 @@ FILE *fp;
 int BUFSIZE;
 int buffIndex, Index, lnNum = 1; // buffIndex is index in the buffer, index is which buffer is in use
 char *twinBuff[2];
+int didWeReachEnd = 0;
 
 int hasher(char lexeme[21])
 {
@@ -170,7 +171,9 @@ int hasher(char lexeme[21])
 void fillBuff()
 {
     Index = (Index == 0) ? 1 : 0;
-    fread(twinBuff[Index], sizeof(char), BUFSIZE - 1, fp);
+    int charsRead = fread(twinBuff[Index], sizeof(char), BUFSIZE - 1, fp);
+    if(charsRead<BUFSIZE)
+        twinBuff[Index][charsRead] = EOF;
     twinBuff[Index][BUFSIZE - 1] = EOF;
     buffIndex = 0;
 }
@@ -200,11 +203,11 @@ struct TOKEN getNextToken()
             return genToken(lexeme, ERROR4, lnNum);
         if (buffIndex == BUFSIZE - 1)
             fillBuff();
-        if (twinBuff[Index][buffIndex] == EOF){
-            if(state == 3 || state == 4)   
-                printf("Comment didn't end!\n");    // TODO an error
-            return genToken(lexeme, -1, lnNum);
-        }
+        // if (twinBuff[Index][buffIndex] == EOF){
+        //     if(state == 3 || state == 4)   
+        //         printf("Comment didn't end!\n");    // TODO an error
+        //     return genToken(lexeme, -1, lnNum);
+        // }
 
         char c = twinBuff[Index][buffIndex];
         switch (state)
@@ -309,6 +312,10 @@ struct TOKEN getNextToken()
             else if(c == '\n')
             {
                 lnNum++;
+            }
+
+            else if(c==EOF){
+                return genToken(lexeme, -1, lnNum);
             }
 
             break;

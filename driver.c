@@ -73,10 +73,13 @@ int main(int argc, char *argv[])
                 twinBuff[1] = (char *)malloc(sizeof(char) * BUFSIZE);
                 fillBuff();
                 struct TOKEN test;
-                for(int i = 0; i < 140; i++){
+                while(1){
                     test = getNextToken();
+                    if(test.tok == -1)
+                        break;
                     printf("%d  %s  %s\n", test.lineno, test.lexeme, invhash[test.tok]);
                 }
+                printf("\n");
 
                 break;
             case 3:
