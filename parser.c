@@ -67,9 +67,8 @@ void printNode(struct treeNode *tn, FILE *fp)
     fprintf(fp, "%s,\t%d,\t%s,\t,%s,\t%s,\tisfLeafNode : %s,\t%s\n", lexemeCurrentNode, n, tokenName, numVal, parentNodeSymbol, isLeafNode, nodeSymbol);
 }
 
-void printParseTree(struct treeNode *tn, char *outfile)
+void printParseTree(struct treeNode *tn, FILE* fp)
 {
-    FILE *fp = fopen(outfile, "w");
     struct TOKEN tk;
     tk.tok = tn->symbol;
     if (isTerm(tk))
@@ -77,12 +76,12 @@ void printParseTree(struct treeNode *tn, char *outfile)
         printNode(tn, fp);
         return;
     }
-    printParseTree(tn->child, outfile);
+    printParseTree(tn->child, fp);
     printNode(tn, fp);
     struct treeNode *tmp = tn->child->sibling;
     while (tmp != NULL)
     {
-        printParseTree(tmp, outfile);
+        printParseTree(tmp, fp);
         tmp = tmp->sibling;
     }
 }
@@ -353,7 +352,8 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
             }
         }
     }
-    printParseTree(tn, "outFile.txt");
+    FILE * fp = fopen("outFile.txt", "w");
+    printParseTree(tn, fp);
 }
 
 int parser(char *testcasefile)
