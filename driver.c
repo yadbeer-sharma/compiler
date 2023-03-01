@@ -7,7 +7,7 @@
 int main(int argc, char *argv[])
 {
     int option=-1;
-    
+    char *filename;
     while(option!=0)
     {
         printf("Please input option and press enter\n");
@@ -26,11 +26,28 @@ int main(int argc, char *argv[])
                 printf("Successfully exiting\n");
                 return 0;
                 break;
-            case 1:  
-                //TODO call function to print uncommented function
+
+            case 1: 
+                
+                if (argc <= 2){
+                    printf("Too less arguments! Please provide buffer size and filename\n");
+                    exit(0);
+                }
+                else if (argc == 3){
+                    BUFSIZE = atoi(argv[1]);
+                    filename = (char *)malloc(strlen(argv[2]));
+                    strcpy(filename, argv[2]);
+                }
+                else{
+                    printf("Too many arguments!\n");
+                    exit(0);
+                }
+                removeComments(filename, "cleanfile.txt");
+
                 break; 
+
+
             case 2:
-                char *filename;
                 if (argc <= 2){
                     printf("Too less arguments! Please provide buffer size and filename\n");
                     exit(0);
