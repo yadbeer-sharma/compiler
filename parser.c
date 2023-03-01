@@ -325,12 +325,12 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
                     printf("rule no from parse table is  : %d\n", rule);
                     printf("grammar at (rule, 1) : %d\n", grammar[rule][1]);
                     tmp_stele1->tok.tok = grammar[rule][1];
-                    // struct treeNode *prev = (struct treeNode *)malloc(sizeof(struct treeNode));
-                    // prev->symbol = grammar[rule][1];
-                    // tp.nodeAddr->child = prev;
-                    // prev->lnNum = lineNum;
-                    // prev->parentSymbol = tp.nodeAddr->symbol;
-                    // tmp_stele1->nodeAddr = prev;
+                    struct treeNode *prev = (struct treeNode *)malloc(sizeof(struct treeNode));
+                    prev->symbol = grammar[rule][1];
+                    tp.nodeAddr->child = prev;
+                    prev->lnNum = lineNum;
+                    prev->parentSymbol = tp.nodeAddr->symbol;
+                    tmp_stele1->nodeAddr = prev;
                     *s = push(*tmp_stele1, *s);
                     for (int i = 2; i < 15; i++)
                     {
@@ -338,17 +338,17 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
                             break;
                         struct stackElement *tmp_stele = (struct stackElement *)malloc(sizeof(struct stackElement));
                         tmp_stele->tok.tok = grammar[rule][i];
-                        // struct treeNode *tmp_tn = (struct treeNode *)malloc(sizeof(struct treeNode));
-                        // tmp_stele->nodeAddr = tmp_tn;
-                        // tmp_tn->lnNum = lineNum;
-                        // tmp_tn->parentSymbol = tp.tok.tok;
-                        // tmp_tn->symbol = grammar[rule][i];
-                        // prev->sibling = tmp_tn;
-                        // prev = tmp_tn;
+                        struct treeNode *tmp_tn = (struct treeNode *)malloc(sizeof(struct treeNode));
+                        tmp_stele->nodeAddr = tmp_tn;
+                        tmp_tn->lnNum = lineNum;
+                        tmp_tn->parentSymbol = tp.tok.tok;
+                        tmp_tn->symbol = grammar[rule][i];
+                        prev->sibling = tmp_tn;
+                        prev = tmp_tn;
                         *s = push(*tmp_stele, *s);
                     }
                     printf("Done with other modules\n");
-                    // prev->sibling = NULL;
+                    prev->sibling = NULL;
                 }
             }
         }
@@ -527,7 +527,7 @@ void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int ru
             for (int k = 0; k < NUM_TERM; k++)
             {
                 if (f[gram[x][0]][1][k] == 1)
-                    f[inde][1][k] = 1;
+                    f[inde][1][k] = x;
             }
         }
         else
@@ -546,7 +546,7 @@ void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int ru
                 for (int k = 0; k < NUM_TERM; k++)
                 {
                     if (f[gram[x][j]][0][k] != -1 && k != 62)
-                        f[inde][1][k] = 1;
+                        f[inde][1][k] = x;
                 }
             }
             if (fl_fo)
@@ -556,7 +556,7 @@ void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int ru
                 for (int k = 0; k < NUM_TERM; k++)
                 {
                     if (f[gram[x][0]][1][k] == 1)
-                        f[inde][1][k] = 1;
+                        f[inde][1][k] = x;
                 }
             }
         }
@@ -642,7 +642,7 @@ void createParseTable(int f[NUM_NONTERM][2][NUM_TERM], int parTab[NUM_NONTERM][N
 
             for (int j = 0; j < NUM_TERM; j++)
                 if (f[i][1][j] != -1)
-                    parTab[i][j] = 444;
+                    parTab[i][j] = f[i][1][j];
         }
     }
     return;
