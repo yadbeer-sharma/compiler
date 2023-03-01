@@ -230,12 +230,26 @@ void parseInputSourceCode(char *testcaseFile, int *parseTable[])
             return; // TODO end of lexical analysis
         if (currTok.tok == ERROR1 || currTok.tok == ERROR2 || currTok.tok == ERROR3 || currTok.tok == ERROR4)
         {
-            // TODO error handling
+            switch (currTok.tok)
+                {
+                case ERROR1:
+                    printf("Error on line %d : Invalid Numeric Literal!\n", currTok.lineno);
+                    break;
+                case ERROR2:
+                    printf("Error on line %d : found expression of type a.b or !a or a=b\n", currTok.lineno);
+                    break;
+                case ERROR3:
+                    printf("Error on line %d : Unidentified character!\n", currTok.lineno);
+                    break;
+                case ERROR4:
+                    printf("Error on line %d : Lexeme length exceeds 20 characters!\n", currTok.lineno);
+                    break;
+                }
         }
         else
         {
             struct stackElement tp = top(*s);
-            if (tp.tok.tok == 62)
+            if (tp.tok.tok == e)
                 *s = pop(*s);
             else if (isTerm(tp.tok))
             {
