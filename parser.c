@@ -33,9 +33,9 @@ void printNode(struct treeNode *tn, FILE *fp)
     char *numVal;
     char *tokenName;
     char *lexemeCurrentNode;
-    char *parentNodeSymbol = " "; // TODO inverse hash
+    char *parentNodeSymbol = invhash[tn->parentSymbol];
     char *isLeafNode;
-    char *nodeSymbol = " "; // TODO inverse hash
+    char *nodeSymbol = invhash[tn->symbol];
 
     if (tn->symbol == NUM || tn->symbol == RNUM)
         numVal = tn->lexeme;
@@ -47,9 +47,9 @@ void printNode(struct treeNode *tn, FILE *fp)
     if (isTerm(tk))
     {
         lexemeCurrentNode = tn->lexeme;
-        tokenName = " ";
+        tokenName = invhash[tn->symbol];
         isLeafNode = "Yes";
-    } // TODO inverse hash here
+    }
     else
     {
         lexemeCurrentNode = "----";
@@ -208,7 +208,7 @@ void parseInputSourceCode(char *testcaseFile, int *parseTable[])
     struct stackElement stEle2;
     struct treeNode *tn = (struct treeNode *)malloc(sizeof(struct treeNode));
     stEle2.nodeAddr = tn;
-    tn->parentSymbol = 11111; // TODO for root symbol
+    tn->parentSymbol = 143; // for root symbol
     int lineNum = 0;
     struct TOKEN tk2;
     tk2.tok = program;

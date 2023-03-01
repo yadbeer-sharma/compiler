@@ -174,7 +174,7 @@ char gt5[11][11]= {"integer", "boolean", "declare", "module",
     "returns", "switch", "default"
     };
 
-char invhash[143][30] = {"",
+char invhash[144][30] = {"",
     "OF",
     "IN",
     "OR",
@@ -310,5 +310,6 @@ char invhash[143][30] = {"",
     "value",
     "varPrint",
     "var_id_num",
-    "whichStm"
+    "whichStm",
+    "ROOT"
     };
