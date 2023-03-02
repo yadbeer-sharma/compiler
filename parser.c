@@ -164,7 +164,7 @@ int hash_nt(char *nonterminal)
         20, 0, 0, 31, 0, 0, 25, 0, 0, 41, 0, 0, 62, 100, 123, 10};
 
     return (G[hash_nt_support(nonterminal, "4NSNCi1PklHjc9KfCnPeEQ8")] +
-            G[hash_nt_support(nonterminal, "n9pIjFAR7hLfLOWd47plOlk")]) % 128 + 70;
+            G[hash_nt_support(nonterminal, "n9pIjFAR7hLfLOWd47plOlk")]) %128 + 70;
 }
 
 void removeTikona(char *token)
