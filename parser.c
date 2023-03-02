@@ -232,8 +232,8 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
     programNT.tok.lineno = currTok.lineno;
     s = push(programNT, s);
 
-    // while (1)
-    for(int i = 0; i<55; i++)
+     while (1)
+    //for(int i = 0; i<70; i++)
     {
         if (isEmpty(s))
             printf("stack is empty!\n");
@@ -318,7 +318,7 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
 
                     int rule = parseTable[tp.tok.tok][currTok.tok];
                     // printf("top token is :  %s\n", invhash[tp.tok.tok]);
-                    printf("rule no is %d\n", rule);
+                    printf("rule no is %d, for token %s\n", rule, invhash[currTok.tok]);
                     s = pop(s);
 
                     int i = 14;
@@ -463,11 +463,7 @@ int parser(char *testcasefile)
 
     createParseTable(F, parseTable, grammar);
 
-    
-    for(int i = 0; i < NUM_TERM; i++){
-        if(parseTable[72][i]!=-1)
-        printf("%d %d",parseTable[72][i],i);
-    } 
+    printf(" checking %d",parseTable[statement][GET_VALUE]);
     parseInputSourceCode(testcasefile, parseTable, grammar);
 }
 
@@ -533,6 +529,7 @@ void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NU
         if (focal[i] == 0 && fo_rule_index[i][0][0] != -1)
             follow(f, gram, fo_rule_index, focal, i);
     }
+    
 }
 
 void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rule_index[NUM_NONTERM][2][30], int fcal[NUM_NONTERM], int inde)
@@ -592,11 +589,12 @@ void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int ru
             }
             if (fl_fo)
             {
+            
                 if (fcal[gram[x][0]] == 0)
                     follow(f, gram, rule_index, fcal, gram[x][0]);
                 for (int k = 0; k < NUM_TERM; k++)
                 {
-                    if (f[gram[x][0]][1][k] == 1)
+                    if (f[gram[x][0]][1][k] != -1)
                         f[inde][1][k] = x;
                 }
             }

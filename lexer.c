@@ -478,6 +478,8 @@ struct TOKEN getNextToken()
             buffIndex--;
             lexeme[lexIndex] = '\0';
             lexeme[--lexIndex] = '\0';
+            lexeme[--lexIndex] = '\0';
+
             return genToken(lexeme, NUM, lnNum);
             break;
         case 205:
@@ -495,7 +497,7 @@ struct TOKEN getNextToken()
             }
             else
             {
-                lexeme[lexIndex++] = c;
+              //  lexeme[lexIndex++] = c;
                 state = 206;
             }
             break;
@@ -604,6 +606,8 @@ struct TOKEN getNextToken()
         case 304:
             buffIndex--;
             lexeme[lexIndex] = '\0';
+            if(!strcmp(lexeme,"get_value"))
+                return genToken(lexeme, GET_VALUE,lnNum);
             return genToken(lexeme, ID, lnNum);
             break;
         case 400:
