@@ -72,7 +72,9 @@ enum nts
         value = 139,
         varPrint = 140,
         var_id_num = 141,
-        whichStmt = 142
+        whichStmt = 142,
+        N_12 = 143,
+        N_13 = 144
 };
 
 enum E_TOKEN
@@ -174,7 +176,7 @@ char gt5[11][11]= {"integer", "boolean", "declare", "module",
     "returns", "switch", "default"
     };
 
-char invhash[144][30] = {"",
+char invhash[146][30] = {"",
     "OF",
     "IN",
     "OR",
@@ -311,5 +313,8 @@ char invhash[144][30] = {"",
     "varPrint",
     "var_id_num",
     "whichStm",
+    "N_12",
+    "N_13",
     "ROOT"
+
     };

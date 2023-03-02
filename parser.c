@@ -5,7 +5,7 @@
 #include "lexer.c"
 
 int NUM_TERM = 64;
-int NUM_NONTERM = 143;
+int NUM_NONTERM = 145;
 int NUM_GRAMRULES;
 // int *grammar[];
 
@@ -150,22 +150,21 @@ int hash_nt_support(char *key, char *T)
     {
         ret += ((T[i % 23]) * (key[i]));
     }
-    return (ret % 105);
+    return (ret % 128);
 }
 
 int hash_nt(char *nonterminal)
 {
-    int G[] = {0, 0, 0, 0, 0, 56, 0, 49, 0, 0, 0, 9, 0, 0, 0, 96, 0,
-               35, 56, 0, 0, 64, 62, 18, 0, 0, 39, 51, 0, 41, 66, 24, 0, 2, 31, 20, 0,
-               76, 41, 0, 0, 35, 55, 40, 58, 0, 0, 13, 86, 61, 33, 98, 0, 96, 42, 23,
-               0, 103, 12, 34, 10, 103, 9, 6, 40, 11, 79, 92, 86, 30, 0, 40, 50, 90,
-               72, 44, 15, 92, 6, 17, 0, 37, 43, 0, 29, 71, 96, 26, 0, 93, 33, 2, 11,
-               45, 0, 31, 16, 69, 72, 75, 32, 60, 101, 84, 0};
+    int G[] = {0, 0, 15, 0, 18, 0, 0, 0, 0, 0, 18, 97, 122, 0, 0, 23,
+        0, 98, 27, 22, 72, 0, 49, 0, 84, 22, 114, 65, 0, 79, 0, 0, 0, 0, 13, 0,
+        63, 12, 57, 0, 0, 87, 0, 41, 47, 14, 55, 0, 47, 0, 0, 0, 18, 14, 121,
+        17, 14, 42, 18, 118, 69, 0, 119, 0, 9, 0, 3, 19, 10, 0, 4, 0, 0, 102,
+        51, 44, 0, 92, 0, 0, 54, 9, 0, 0, 64, 105, 59, 38, 18, 0, 27, 28, 105,
+        106, 0, 94, 5, 0, 36, 30, 0, 0, 0, 47, 72, 95, 0, 49, 0, 124, 39, 45,
+        20, 0, 0, 31, 0, 0, 25, 0, 0, 41, 0, 0, 62, 100, 123, 10};
 
-    return (G[hash_nt_support(nonterminal, "UlgFf2DbXzntR3XpXIkitLL")] +
-            G[hash_nt_support(nonterminal, "KWW60mhuIm5hVAaAulu8ijr")]) %
-               105 +
-           70;
+    return (G[hash_nt_support(nonterminal, "4NSNCi1PklHjc9KfCnPeEQ8")] +
+            G[hash_nt_support(nonterminal, "n9pIjFAR7hLfLOWd47plOlk")]) % 128 + 70;
 }
 
 void removeTikona(char *token)
