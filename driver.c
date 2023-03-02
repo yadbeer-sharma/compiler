@@ -144,23 +144,25 @@ int main(int argc, char *argv[])
             fillBuff();
             int parsed = parser(filename);
             break;
-        case 4:
+        // case 4:
+        //         int a;
 
-            clock_t start_time, end_time;
+        //         break;
+            // clock_t start_time, end_time;
 
-            double total_CPU_time, total_CPU_time_in_seconds;
+            // double total_CPU_time, total_CPU_time_in_seconds;
 
-            start_time = clock();
+            // start_time = clock();
 
-            // invoke your lexer and parser here
+            // // invoke your lexer and parser here
 
-            end_time = clock();
+            // end_time = clock();
 
-            total_CPU_time = (double)(end_time - start_time);
+            // total_CPU_time = (double)(end_time - start_time);
 
-            total_CPU_time_in_seconds = total_CPU_time /
+            // total_CPU_time_in_seconds = total_CPU_time /
 
-                                        CLOCKS_PER_SEC;
+            //                             CLOCKS_PER_SEC;
 
             // Print both total_CPU_time and total_CPU_time_in_seconds
         }

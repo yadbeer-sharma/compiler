@@ -233,7 +233,7 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
     s = push(programNT, s);
 
     // while (1)
-    for(int i = 0; i<47; i++)
+    for(int i = 0; i<55; i++)
     {
         if (isEmpty(s))
             printf("stack is empty!\n");
@@ -459,19 +459,15 @@ int parser(char *testcasefile)
 
     computeFirstAndFollow(grammar, F);
 
-    for(int i = 0; i < NUM_TERM; i++){
-        printf("%d %d %d\n", i, F[102][0][i], F[102][1][i]);
-    }
+  
 
     createParseTable(F, parseTable, grammar);
 
-    /*
+    
     for(int i = 0; i < NUM_TERM; i++){
-        for(int j = 0; j < NUM_NONTERM; j++){
-            printf("%d ", parseTable[i][j]);
-        }
-        printf("\n");
-    } */
+        if(parseTable[72][i]!=-1)
+        printf("%d %d",parseTable[72][i],i);
+    } 
     parseInputSourceCode(testcasefile, parseTable, grammar);
 }
 
@@ -496,6 +492,8 @@ void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NU
     int fcal[NUM_NONTERM]; // to store which first set have been calculated
     memset(fcal, 0, NUM_NONTERM * sizeof(int));
 
+    for(int i=0;i<NUM_TERM;i++)
+    f[i][0][i]=999;
     for (int i = 0; i < NUM_GRAMRULES; i++)
     {
         if (fcal[gram[i][0]] == 0)
@@ -503,7 +501,7 @@ void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NU
     }
 
     ////////////////// Follow Set /////////////////////////////////////////////////////
-
+    
     f[gram[0][0]][1][63] = 1; /// $ in follow of start
 
     ///////////// creating grammar index table for follow /////////////////////////
@@ -529,7 +527,7 @@ void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NU
 
     int focal[NUM_NONTERM]; // to store which follow set have been calculated
     memset(fcal, 0, NUM_NONTERM * sizeof(int));
-    printf("%d \n",fo_rule_index[102][0][0]);
+    //printf("%d \n",fo_rule_index[102][0][0]);
     for (int i = 0; i < NUM_NONTERM; i++)
     {
         if (focal[i] == 0 && fo_rule_index[i][0][0] != -1)
@@ -543,17 +541,16 @@ void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int ru
     if(inde>=0 && inde <NUM_TERM)
     {
         f[inde][1][inde]=1;
+        fcal[inde]=1;
         return;
     }
     for (int i = 0; i < 30; i++)
     {
-          if(inde==102)
-        printf("hulala");
+          
         if (rule_index[inde][0][i] == -1)
             break;
 
-        if(inde==102)
-        printf("hulala");
+        
         int x = rule_index[inde][0][i];
         int y = rule_index[inde][1][i];
 
@@ -567,7 +564,7 @@ void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int ru
                 follow(f, gram, rule_index, fcal, gram[x][0]);
             for (int k = 0; k < NUM_TERM; k++)
             {
-                if (f[gram[x][0]][1][k] == 1)
+                if (f[gram[x][0]][1][k] != -1)
                     f[inde][1][k] = x;
             }
         }
@@ -586,10 +583,11 @@ void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int ru
                     fl_fo = 0;
                 for (int k = 0; k < NUM_TERM; k++)
                 {   
-                    if(inde==102)
-                    printf("%d %d\n",x,j);
+                    
                     if (f[gram[x][j]][0][k] != -1 && k != 62)
-                        f[inde][1][k] = x;
+                       {
+                         f[inde][1][k] = x;
+                       }
                 }
             }
             if (fl_fo)
@@ -668,6 +666,7 @@ void first(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rul
 
 void createParseTable(int f[NUM_NONTERM][2][NUM_TERM], int parTab[NUM_NONTERM][NUM_TERM],int grammar[NUM_GRAMRULES][15])
 {
+    //printf("%d \n\n",f[72][1][48]);
     for(int i=0;i<NUM_GRAMRULES;i++)
     {
         int j=1;
@@ -691,6 +690,7 @@ void createParseTable(int f[NUM_NONTERM][2][NUM_TERM], int parTab[NUM_NONTERM][N
         }
         if(flag==1)
         {
+            
             for(int k=0;k<NUM_TERM;k++)
             {
                 if(f[grammar[i][0]][1][k]!=-1)
