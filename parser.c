@@ -12,7 +12,7 @@ int NUM_GRAMRULES;
 void first(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rule_index[NUM_NONTERM][10], int fcal[NUM_NONTERM], int inde);
 void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rule_index[NUM_NONTERM][2][30], int fcal[NUM_NONTERM], int inde);
 void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NUM_TERM]);
-void createParseTable(int f[NUM_NONTERM][2][NUM_TERM], int parTab[NUM_NONTERM][NUM_TERM],int grammar[NUM_GRAMRULES][15]);
+void createParseTable(int f[NUM_NONTERM][2][NUM_TERM], int parTab[NUM_NONTERM][NUM_TERM], int grammar[NUM_GRAMRULES][15]);
 
 int isTerm(struct TOKEN tk)
 {
@@ -40,9 +40,11 @@ void printNode(struct treeNode *tn, FILE *fp)
     char *parentNodeSymbol = invhash[tn->parentSymbol];
     char *isLeafNode;
     char *nodeSymbol = invhash[tn->symbol];
-
+    // printf("printNode is called\n");
     if (tn->symbol == NUM || tn->symbol == RNUM)
-        numVal = tn->lexeme;
+        strcpy(numVal, tn->lexeme);
+    // numVal = tn->lexeme;
+
     else
         numVal = "----";
 
@@ -50,20 +52,31 @@ void printNode(struct treeNode *tn, FILE *fp)
     tk.tok = tn->symbol;
     if (isTerm(tk))
     {
-        lexemeCurrentNode = tn->lexeme;
-        tokenName = invhash[tn->symbol];
-        isLeafNode = "Yes";
+        strcpy(&lexemeCurrentNode, tn->lexeme);
+        // lexemeCurrentNode = tn->lexeme;
+        strcpy(&tokenName, invhash[tn->symbol]);
+        // tokenName = invhash[tn->symbol];
+        strcpy(&isLeafNode, "Yes");
+        // isLeafNode = "Yes";
     }
     else
     {
-        lexemeCurrentNode = "----";
-        tokenName = "----";
-        isLeafNode = "No";
+        // printf("here\n");
+        strcpy(&lexemeCurrentNode, "----");
+        // lexemeCurrentNode = "----";
+        strcpy(&tokenName, "----");
+        // tokenName = "----";
+        strcpy(&isLeafNode, "No");
+        // isLeafNode = "No";
     }
 
     int n = tn->lnNum;
+    printf("%s,\t%d,\t%s,\t,%s,\t%s,\tisfLeafNode : %s,\t%s\n", 
+    &lexemeCurrentNode, n, &tokenName, &numVal, parentNodeSymbol, &isLeafNode, nodeSymbol);
 
     fprintf(fp, "%s,\t%d,\t%s,\t,%s,\t%s,\tisfLeafNode : %s,\t%s\n", lexemeCurrentNode, n, tokenName, numVal, parentNodeSymbol, isLeafNode, nodeSymbol);
+    // printf("printNode is ended\n");
+
 }
 
 void printParseTree(struct treeNode *tn, FILE *fp)
@@ -156,15 +169,17 @@ int hash_nt_support(char *key, char *T)
 int hash_nt(char *nonterminal)
 {
     int G[] = {0, 0, 15, 0, 18, 0, 0, 0, 0, 0, 18, 97, 122, 0, 0, 23,
-        0, 98, 27, 22, 72, 0, 49, 0, 84, 22, 114, 65, 0, 79, 0, 0, 0, 0, 13, 0,
-        63, 12, 57, 0, 0, 87, 0, 41, 47, 14, 55, 0, 47, 0, 0, 0, 18, 14, 121,
-        17, 14, 42, 18, 118, 69, 0, 119, 0, 9, 0, 3, 19, 10, 0, 4, 0, 0, 102,
-        51, 44, 0, 92, 0, 0, 54, 9, 0, 0, 64, 105, 59, 38, 18, 0, 27, 28, 105,
-        106, 0, 94, 5, 0, 36, 30, 0, 0, 0, 47, 72, 95, 0, 49, 0, 124, 39, 45,
-        20, 0, 0, 31, 0, 0, 25, 0, 0, 41, 0, 0, 62, 100, 123, 10};
+               0, 98, 27, 22, 72, 0, 49, 0, 84, 22, 114, 65, 0, 79, 0, 0, 0, 0, 13, 0,
+               63, 12, 57, 0, 0, 87, 0, 41, 47, 14, 55, 0, 47, 0, 0, 0, 18, 14, 121,
+               17, 14, 42, 18, 118, 69, 0, 119, 0, 9, 0, 3, 19, 10, 0, 4, 0, 0, 102,
+               51, 44, 0, 92, 0, 0, 54, 9, 0, 0, 64, 105, 59, 38, 18, 0, 27, 28, 105,
+               106, 0, 94, 5, 0, 36, 30, 0, 0, 0, 47, 72, 95, 0, 49, 0, 124, 39, 45,
+               20, 0, 0, 31, 0, 0, 25, 0, 0, 41, 0, 0, 62, 100, 123, 10};
 
     return (G[hash_nt_support(nonterminal, "4NSNCi1PklHjc9KfCnPeEQ8")] +
-            G[hash_nt_support(nonterminal, "n9pIjFAR7hLfLOWd47plOlk")]) %128 + 70;
+            G[hash_nt_support(nonterminal, "n9pIjFAR7hLfLOWd47plOlk")]) %
+               128 +
+           70;
 }
 
 void removeTikona(char *token)
@@ -231,8 +246,8 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
     programNT.tok.lineno = currTok.lineno;
     s = push(programNT, s);
 
-     while (1)
-    //for(int i = 0; i<70; i++)
+    while (1)
+    // for(int i = 0; i<70; i++)
     {
         if (isEmpty(s))
             printf("stack is empty!\n");
@@ -297,7 +312,7 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
             }
             else if (tp.tok.tok == -2)
             {
-                
+
                 break;
                 // TODO error : stack empty but input is not yet consumed
             }
@@ -321,14 +336,16 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
                     s = pop(s);
 
                     int i = 14;
-                    while(i>0){
-                        if(grammar[rule][i]!=-1)
+                    while (i > 0)
+                    {
+                        if (grammar[rule][i] != -1)
                             break;
                         i--;
                     }
                     // printf("TO BE PUSHED : %d\n", i);
 
-                    while(i>0){
+                    while (i > 0)
+                    {
                         struct stackElement *tmp_stele1 = (struct stackElement *)malloc(sizeof(struct stackElement));
                         tmp_stele1->tok.tok = grammar[rule][i];
                         i--;
@@ -375,6 +392,34 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
     }
     // FILE *fp1 = fopen("outFile.txt", "w");
     // printParseTree(tn, fp1);
+
+    struct treeNode a;
+    struct treeNode *tn1 = malloc(sizeof(struct treeNode));
+    struct treeNode *tn2 = malloc(sizeof(struct treeNode));
+    struct treeNode *tn3 = malloc(sizeof(struct treeNode));
+    struct treeNode *tn4 = malloc(sizeof(struct treeNode));
+    struct treeNode *tn5 = malloc(sizeof(struct treeNode));
+    
+    tn1->child = tn2;
+    tn2->child = tn3;
+    tn4->child = tn5;
+    tn2->sibling = tn4;
+    tn1->parentSymbol = 145;
+    tn1->symbol = 71;
+    tn2->symbol = 72;
+    tn4->symbol = 74;
+    tn3->symbol = 1;
+    tn5->symbol = 2;
+    tn2->parentSymbol = tn1->symbol;
+    tn4->parentSymbol = tn1->symbol;
+    tn3->parentSymbol = tn2->symbol;
+    tn5->parentSymbol = tn4->symbol;
+    tn3->sibling = NULL;
+    tn5->sibling = NULL;
+    tn1->sibling = NULL;
+
+    printParseTree(tn1, fp);
+
 }
 
 int parser(char *testcasefile)
@@ -458,11 +503,9 @@ int parser(char *testcasefile)
 
     computeFirstAndFollow(grammar, F);
 
-  
-
     createParseTable(F, parseTable, grammar);
 
-    printf(" checking %d",parseTable[statement][GET_VALUE]);
+    // printf(" checking %d", parseTable[statement][GET_VALUE]);
     parseInputSourceCode(testcasefile, parseTable, grammar);
 }
 
@@ -487,8 +530,8 @@ void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NU
     int fcal[NUM_NONTERM]; // to store which first set have been calculated
     memset(fcal, 0, NUM_NONTERM * sizeof(int));
 
-    for(int i=0;i<NUM_TERM;i++)
-    f[i][0][i]=999;
+    for (int i = 0; i < NUM_TERM; i++)
+        f[i][0][i] = 999;
     for (int i = 0; i < NUM_GRAMRULES; i++)
     {
         if (fcal[gram[i][0]] == 0)
@@ -496,7 +539,7 @@ void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NU
     }
 
     ////////////////// Follow Set /////////////////////////////////////////////////////
-    
+
     f[gram[0][0]][1][63] = 1; /// $ in follow of start
 
     ///////////// creating grammar index table for follow /////////////////////////
@@ -512,7 +555,7 @@ void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NU
         {
             if (gram[i][j] == -1)
                 break;
-            
+
             fo_rule_index[gram[i][j]][0][nt_rule_count[gram[i][j]]] = i;
             fo_rule_index[gram[i][j]][1][nt_rule_count[gram[i][j]]++] = j;
         }
@@ -522,31 +565,29 @@ void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NU
 
     int focal[NUM_NONTERM]; // to store which follow set have been calculated
     memset(focal, 0, NUM_NONTERM * sizeof(int));
-    //printf("%d \n",fo_rule_index[102][0][0]);
+    // printf("%d \n",fo_rule_index[102][0][0]);
     for (int i = 0; i < NUM_NONTERM; i++)
     {
         if (focal[i] == 0 && fo_rule_index[i][0][0] != -1)
             follow(f, gram, fo_rule_index, focal, i);
     }
-    
 }
 
 void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rule_index[NUM_NONTERM][2][30], int fcal[NUM_NONTERM], int inde)
 {
 
-    if(inde>=0 && inde <NUM_TERM)
+    if (inde >= 0 && inde < NUM_TERM)
     {
-        f[inde][1][inde]=1;
-        fcal[inde]=1;
+        f[inde][1][inde] = 1;
+        fcal[inde] = 1;
         return;
     }
     for (int i = 0; i < 30; i++)
     {
-          
+
         if (rule_index[inde][0][i] == -1)
             break;
 
-        
         int x = rule_index[inde][0][i];
         int y = rule_index[inde][1][i];
 
@@ -578,17 +619,17 @@ void follow(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int ru
                 if (f[gram[x][j]][0][62] == -1)
                     fl_fo = 0;
                 for (int k = 0; k < NUM_TERM; k++)
-                {   
-                    
+                {
+
                     if (f[gram[x][j]][0][k] != -1 && k != 62)
-                       {
-                         f[inde][1][k] = x;
-                       }
+                    {
+                        f[inde][1][k] = x;
+                    }
                 }
             }
             if (fl_fo)
             {
-            
+
                 if (fcal[gram[x][0]] == 0)
                     follow(f, gram, rule_index, fcal, gram[x][0]);
                 for (int k = 0; k < NUM_TERM; k++)
@@ -661,60 +702,60 @@ void first(int f[NUM_NONTERM][2][NUM_TERM], int gram[NUM_GRAMRULES][15], int rul
     return;
 }
 
-void createParseTable(int f[NUM_NONTERM][2][NUM_TERM], int parTab[NUM_NONTERM][NUM_TERM],int grammar[NUM_GRAMRULES][15])
+void createParseTable(int f[NUM_NONTERM][2][NUM_TERM], int parTab[NUM_NONTERM][NUM_TERM], int grammar[NUM_GRAMRULES][15])
 {
-    //printf("%d \n\n",f[72][1][48]);
-    for(int i=0;i<NUM_GRAMRULES;i++)
+    // printf("%d \n\n",f[72][1][48]);
+    for (int i = 0; i < NUM_GRAMRULES; i++)
     {
-        int j=1;
-        int flag=1;
-        while(grammar[i][j]!=-1)
+        int j = 1;
+        int flag = 1;
+        while (grammar[i][j] != -1)
         {
-            for(int k=0;k<NUM_TERM;k++)
+            for (int k = 0; k < NUM_TERM; k++)
             {
-                if(f[grammar[i][j]][0][k]!=-1)
-                parTab[grammar[i][0]][k]=i;
+                if (f[grammar[i][j]][0][k] != -1)
+                    parTab[grammar[i][0]][k] = i;
             }
-            if(f[grammar[i][j]][0][62]!=-1)
+            if (f[grammar[i][j]][0][62] != -1)
             {
                 j++;
             }
             else
             {
-                flag=0;
+                flag = 0;
                 break;
             }
         }
-        if(flag==1)
+        if (flag == 1)
         {
-            
-            for(int k=0;k<NUM_TERM;k++)
+
+            for (int k = 0; k < NUM_TERM; k++)
             {
-                if(f[grammar[i][0]][1][k]!=-1)
-                parTab[grammar[i][0]][k]=i;
-            }   
+                if (f[grammar[i][0]][1][k] != -1)
+                    parTab[grammar[i][0]][k] = i;
+            }
         }
     }
-//     for (int i = 0; i < NUM_NONTERM; i++)
-//     {
-//         if (f[i][0][62] == -1)
-//         {
-//             for (int j = 0; j < NUM_TERM; j++)
-//                 parTab[i][j] = f[i][0][j];
-//         }
-//         else
-//         {
-//             int e_rule = f[i][0][62];
+    //     for (int i = 0; i < NUM_NONTERM; i++)
+    //     {
+    //         if (f[i][0][62] == -1)
+    //         {
+    //             for (int j = 0; j < NUM_TERM; j++)
+    //                 parTab[i][j] = f[i][0][j];
+    //         }
+    //         else
+    //         {
+    //             int e_rule = f[i][0][62];
 
-//             for (int j = 0; j < NUM_TERM; j++)
-//                 if (f[i][0][j] != e_rule)
-//                     parTab[i][j] = f[i][0][j];
+    //             for (int j = 0; j < NUM_TERM; j++)
+    //                 if (f[i][0][j] != e_rule)
+    //                     parTab[i][j] = f[i][0][j];
 
-//             for (int j = 0; j < NUM_TERM; j++)
-//                     parTab[i][j] = f[i][1][j];
-//         }
-//     }
-//     return;
+    //             for (int j = 0; j < NUM_TERM; j++)
+    //                     parTab[i][j] = f[i][1][j];
+    //         }
+    //     }
+    //     return;
 }
 
 void populateSyncSets(int sync[NUM_NONTERM][NUM_TERM], int f[NUM_NONTERM][2][NUM_TERM])

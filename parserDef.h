@@ -23,7 +23,6 @@ struct treeNode{
     struct treeNode * child;
     int lnNum;
     char lexeme[21];
-    union valueIfNum v;
     int symbol;
     int parentSymbol;
 };
