@@ -521,7 +521,7 @@ void computeFirstAndFollow(int gram[NUM_GRAMRULES][15], int f[NUM_NONTERM][2][NU
     ////////////////////////////////////////////////////////////////////////////
 
     int focal[NUM_NONTERM]; // to store which follow set have been calculated
-    memset(fcal, 0, NUM_NONTERM * sizeof(int));
+    memset(focal, 0, NUM_NONTERM * sizeof(int));
     //printf("%d \n",fo_rule_index[102][0][0]);
     for (int i = 0; i < NUM_NONTERM; i++)
     {
