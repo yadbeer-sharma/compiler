@@ -1,0 +1,68 @@
+declare module mod1;
+<<<driver Program>>>
+start
+	declare M: array[-5..10] of real;
+	declare a,b:integer;
+	a:=-99;
+	b:=+86;
+	declare N: 
+
+
+	array[a..b] of integer;
+
+	declare v,w: real;
+	declare x,y : boolean;
+	get_value(v);
+	get_value(w);
+	x:=true;y:=false;
+	declare g:integer;
+	declare z:boolean;
+	z:=                                            **comment** (x AND y) OR (x OR y) AND (x!=y);
+	g:=a+100;
+	print(N[g]);
+
+	declare flag : boolean;
+	flag = (x==y);
+	switch(flag)
+	start
+		case true :v:=12.34567;w:=1.97e71-71.97E28;
+		break;
+		case false :for( a in -2..3)
+					start
+						b=b+2*a;
+					end
+		break;
+	end
+
+	declare intloo : integer;
+	intloo:=a+a/b;
+	switch(intloo)
+	start
+		case 1: intloo:=a;
+				break
+		;
+		case 2: intloo:=b;
+		break;
+		default:
+		intloo:=a/b+b/a;
+		while(a<=b)
+		start N[a]:=a-b+b;
+		a:=a+b;end
+		break;
+	end
+	
+
+	declare module mod2;
+
+	[a,b] := use module mod1 with parameters v, w, x, y;
+end
+
+<<module mod1>>
+takes input [v: real, w: real,x:boolean,y:boolean];
+returns [x: integer, abc: integer];
+start
+declare c: real;
+c:=10.4;
+x:=a+b-10;
+abc:=b/5+c;
+end
