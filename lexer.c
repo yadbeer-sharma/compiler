@@ -367,8 +367,10 @@ struct TOKEN getNextToken()
             }
             break;
         case 4:
-            if (c == '*')
+            if (c == '*'){
                 state = 0;
+                lexIndex = 0;
+                }
             else
             {
                 if (c == '\n')
