@@ -52,30 +52,33 @@ void printNode(struct treeNode *tn, FILE *fp)
     tk.tok = tn->symbol;
     if (isTerm(tk))
     {
-        strcpy(&lexemeCurrentNode, tn->lexeme);
-        // lexemeCurrentNode = tn->lexeme;
-        strcpy(&tokenName, invhash[tn->symbol]);
-        // tokenName = invhash[tn->symbol];
-        strcpy(&isLeafNode, "Yes");
-        // isLeafNode = "Yes";
+        // strcpy(&lexemeCurrentNode, tn->lexeme);
+        lexemeCurrentNode = tn->lexeme;
+        // strcpy(&tokenName, invhash[tn->symbol]);
+        tokenName = invhash[tn->symbol];
+        // strcpy(&isLeafNode, "Yes");
+        isLeafNode = "Yes";
     }
     else
     {
         // printf("here\n");
-        strcpy(&lexemeCurrentNode, "----");
-        // lexemeCurrentNode = "----";
-        strcpy(&tokenName, "----");
-        // tokenName = "----";
-        strcpy(&isLeafNode, "No");
-        // isLeafNode = "No";
+        // strcpy(&lexemeCurrentNode, "----");
+        lexemeCurrentNode = "----";
+        // strcpy(&tokenName, "----");
+        tokenName = "----";
+        // strcpy(&isLeafNode, "No");
+        isLeafNode = "No";
     }
 
     int n = tn->lnNum;
+
+    FILE* fp1=fopen("outFile.txt","a+");
     printf("%s,\t%d,\t%s,\t,%s,\t%s,\tisfLeafNode : %s,\t%s\n", 
     &lexemeCurrentNode, n, &tokenName, &numVal, parentNodeSymbol, &isLeafNode, nodeSymbol);
 
-    fprintf(fp, "%s,\t%d,\t%s,\t,%s,\t%s,\tisfLeafNode : %s,\t%s\n", lexemeCurrentNode, n, tokenName, numVal, parentNodeSymbol, isLeafNode, nodeSymbol);
+    fprintf(fp1, "%s,\t%d,\t%s,\t,%s,\t%s,\tisfLeafNode : %s,\t%s\n", lexemeCurrentNode, n, tokenName, numVal, parentNodeSymbol, isLeafNode, nodeSymbol);
     // printf("printNode is ended\n");
+    fclose(fp1);
 
 }
 
