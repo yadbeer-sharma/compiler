@@ -1,5 +1,5 @@
 declare module mod1;
-<<<driver Program>>>
+<<<driver program>>>
 start
 	declare M: array[-5..10] of real;
 	declare a,b:integer;
@@ -17,19 +17,19 @@ start
 	x:=true;y:=false;
 	declare g:integer;
 	declare z:boolean;
-	z:=                                            **comment** (x AND y) OR (x OR y) AND (x!=y);
+	z:=(x AND y) OR (x OR y) AND (x!=y);
 	g:=a+100;
 	print(N[g]);
 
 	declare flag : boolean;
-	flag = (x==y);
+	flag := (x==y);
 	switch(flag)
 	start
 		case true :v:=12.34567;w:=1.97e71-71.97E28;
 		break;
 		case false :for( a in -2..3)
 					start
-						b=b+2*a;
+						b:=b+2*a;
 					end
 		break;
 	end

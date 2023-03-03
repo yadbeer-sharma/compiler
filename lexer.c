@@ -322,7 +322,8 @@ struct TOKEN getNextToken()
             break;
         case 7:
             if (c == '=')
-                return genToken(lexeme, NE, lnNum);
+               { buffIndex++;
+                return genToken(lexeme, NE, lnNum);}
             else
             {
                 state = 298;
@@ -333,7 +334,9 @@ struct TOKEN getNextToken()
 
         case 5:
             if (c == '=')
-                return genToken(lexeme, EQ, lnNum);
+                {
+                    buffIndex++;
+                return genToken(lexeme, EQ, lnNum);}
             else
             {
                 state = 298;
