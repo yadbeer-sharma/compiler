@@ -30,7 +30,7 @@ struct stack createStack()
     return s;
 }
 
-void printNode(struct treeNode *tn, FILE *fp)
+void printNode(struct treeNode *tn, FILE *fp1)
 {
     // lexemeCurrentNode lineno tokenName valueIfNumber
     // parentNodeSymbol isLeafNode(yes/no) nodeSymbol
@@ -40,10 +40,10 @@ void printNode(struct treeNode *tn, FILE *fp)
     char *parentNodeSymbol = invhash[tn->parentSymbol];
     char *isLeafNode;
     char *nodeSymbol = invhash[tn->symbol];
-    // printf("printNode is called\n");
+    printf("printNode is called\n");
     if (tn->symbol == NUM || tn->symbol == RNUM)
-        strcpy(numVal, tn->lexeme);
-    // numVal = tn->lexeme;
+        // strcpy(numVal, tn->lexeme);
+        numVal = tn->lexeme;
 
     else
         numVal = "----";
@@ -52,51 +52,51 @@ void printNode(struct treeNode *tn, FILE *fp)
     tk.tok = tn->symbol;
     if (isTerm(tk))
     {
-        strcpy(&lexemeCurrentNode, tn->lexeme);
-        // lexemeCurrentNode = tn->lexeme;
-        strcpy(&tokenName, invhash[tn->symbol]);
-        // tokenName = invhash[tn->symbol];
-        strcpy(&isLeafNode, "Yes");
-        // isLeafNode = "Yes";
+        // strcpy(&lexemeCurrentNode, tn->lexeme);
+        lexemeCurrentNode = tn->lexeme;
+        // strcpy(&tokenName, invhash[tn->symbol]);
+        tokenName = invhash[tn->symbol];
+        // strcpy(&isLeafNode, "Yes");
+        isLeafNode = "Yes";
     }
     else
     {
         // printf("here\n");
-        strcpy(&lexemeCurrentNode, "----");
-        // lexemeCurrentNode = "----";
-        strcpy(&tokenName, "----");
-        // tokenName = "----";
-        strcpy(&isLeafNode, "No");
-        // isLeafNode = "No";
+        // strcpy(&lexemeCurrentNode, "----");
+        lexemeCurrentNode = "----";
+        // strcpy(&tokenName, "----");
+        tokenName = "----";
+        // strcpy(&isLeafNode, "No");
+        isLeafNode = "No";
     }
 
     int n = tn->lnNum;
-    printf("%s,\t%d,\t%s,\t,%s,\t%s,\tisfLeafNode : %s,\t%s\n", 
-    &lexemeCurrentNode, n, &tokenName, &numVal, parentNodeSymbol, &isLeafNode, nodeSymbol);
-
-    fprintf(fp, "%s,\t%d,\t%s,\t,%s,\t%s,\tisfLeafNode : %s,\t%s\n", lexemeCurrentNode, n, tokenName, numVal, parentNodeSymbol, isLeafNode, nodeSymbol);
+    printf("%s,\t%d,\t%s,\t,%s,\t%s,\tisfLeafNode : %s,\t%s\n",
+           lexemeCurrentNode, n, tokenName, numVal, parentNodeSymbol, isLeafNode, nodeSymbol);
+    // fprintf(fp1, "here");
+    fprintf(fp1, "%s,\t%d,\t%s,\t,%s,\t%s,\tisfLeafNode : %s,\t%s\n", lexemeCurrentNode, n, tokenName, numVal, parentNodeSymbol, isLeafNode, nodeSymbol);
     // printf("printNode is ended\n");
-
 }
 
-void printParseTree(struct treeNode *tn, FILE *fp)
+void printParseTree(struct treeNode *tn, FILE *fp1)
 {
     struct TOKEN tk;
     tk.tok = tn->symbol;
     if (isTerm(tk))
     { // NOTE that for printing leaf node we are checking if it's a terminal or not, and not that it's child is NULL
-        printNode(tn, fp);
+        printNode(tn, fp1);
         // printf("%d\n", tk.tok);
 
+    printf("inside printing!\n");
         return;
     }
-    printParseTree(tn->child, fp);
-    printNode(tn, fp);
+    printParseTree(tn->child, fp1);
+    printNode(tn, fp1);
     // printf("%d\n", tn->symbol);
     struct treeNode *tmp = tn->child->sibling;
     while (tmp != NULL)
     {
-        printParseTree(tmp, fp);
+        printParseTree(tmp, fp1);
         tmp = tmp->sibling;
     }
 }
@@ -235,6 +235,7 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
 
     FILE *fp = fopen(testcaseFile, "r");
     struct TOKEN currTok = getNextToken();
+    int lineNum = currTok.lineno;
     struct stack s = createStack();
 
     struct stackElement btOfStack;
@@ -244,6 +245,12 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
     struct stackElement programNT;
     programNT.tok.tok = program;
     programNT.tok.lineno = currTok.lineno;
+    struct treeNode *rootNode = (struct treeNode *)malloc(sizeof(struct treeNode));
+    rootNode->sibling = NULL;
+    rootNode->parentSymbol = 145;
+    strcpy(rootNode->lexeme, "----");
+    // printf("rootnode lexeme = %s \n", rootNode->lexeme);
+    programNT.nodeAddr = rootNode;
     s = push(programNT, s);
 
     while (1)
@@ -285,12 +292,31 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
                 s = pop(s);
             else if (isTerm(tp.tok))
             {
-                printf("Terminam comp: %d %d\n", currTok.tok, tp.tok.tok);
+                // printf("Termina comp: %d %d\n", currTok.tok, tp.tok.tok);
                 if (currTok.tok == tp.tok.tok)
                 {
+                    // printf("current token is %s\n", invhash[currTok.tok]);
                     s = pop(s);
-                    // strcpy(tp.nodeAddr->lexeme, currTok.lexeme);
-                    // lineNum = currTok.lineno;
+                    printf("%s is popped\n", invhash[tp.tok.tok]);
+                    printf("%s is on top now\n", invhash[top(s).tok.tok]);
+
+                    strcpy(tp.nodeAddr->lexeme, currTok.lexeme);
+                    // tp.nodeAddr->lexeme = currTok.lexeme;
+
+                    // int j = 0;
+                    // while(currTok.lexeme[j]!='\0'){
+                    //     tp.nodeAddr->lexeme[j] = currTok.lexeme[j];
+                    //     j++;
+                    // }
+
+                    printf("lexeme succ copied!\n");
+                    lineNum = currTok.lineno;
+                    tp.nodeAddr->child = NULL;
+                    tp.nodeAddr->lnNum = lineNum;
+                    tp.nodeAddr->sibling = NULL;
+                    tp.nodeAddr->symbol = currTok.tok;
+                    printf("here!\n");
+
                     // if (currTok.tok == NUM)
                     //     tp.nodeAddr->v.i = atoi(currTok.lexeme);
                     // else if (currTok.tok == RNUM)
@@ -323,7 +349,7 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
                 if (parseTable[tp.tok.tok][currTok.tok] == -1)
                 {
                     printf("%d %d", tp.tok.tok, currTok.tok);
-                    printf("here\n");
+                    printf("error : parseTable entry is empty\n");
                     break;
                     // TODO error : parseTable entry is empty
                 }
@@ -334,6 +360,7 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
                     // printf("top token is :  %s\n", invhash[tp.tok.tok]);
                     printf("rule no is %d, for token %s\n", rule, invhash[currTok.tok]);
                     s = pop(s);
+                    printf("%s is popped\n", invhash[tp.tok.tok]);
 
                     int i = 14;
                     while (i > 0)
@@ -344,12 +371,30 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
                     }
                     // printf("TO BE PUSHED : %d\n", i);
 
+                    struct treeNode *prev = (struct treeNode *)malloc(sizeof(struct treeNode));
+                    prev->lnNum = lineNum;
+                    prev->parentSymbol = tp.tok.tok;
+                    prev->symbol = grammar[rule][i];
+                    prev->sibling = NULL;
+                    struct stackElement *tmp_stele = (struct stackElement *)malloc(sizeof(struct stackElement));
+                    tmp_stele->tok.tok = grammar[rule][i];
+                    tmp_stele->nodeAddr = prev;
+                    s = push(*tmp_stele, s);
+                    i--;
                     while (i > 0)
                     {
                         struct stackElement *tmp_stele1 = (struct stackElement *)malloc(sizeof(struct stackElement));
                         tmp_stele1->tok.tok = grammar[rule][i];
-                        i--;
+                        struct treeNode *nwtn = (struct treeNode *)malloc(sizeof(struct treeNode));
+                        nwtn->lnNum = lineNum;
+                        nwtn->parentSymbol = tp.tok.tok;
+                        nwtn->sibling = prev;
+                        nwtn->symbol = grammar[rule][i];
+                        tmp_stele1->nodeAddr = nwtn;
                         s = push(*tmp_stele1, s);
+
+                        prev = nwtn;
+                        i--;
                     }
 
                     /* struct stackElement *tmp_stele1 = (struct stackElement *)malloc(sizeof(struct stackElement));
@@ -390,16 +435,16 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
             }
         }
     }
+    printf("while broke!\n");
     // FILE *fp1 = fopen("outFile.txt", "w");
     // printParseTree(tn, fp1);
 
-    struct treeNode a;
     struct treeNode *tn1 = malloc(sizeof(struct treeNode));
     struct treeNode *tn2 = malloc(sizeof(struct treeNode));
     struct treeNode *tn3 = malloc(sizeof(struct treeNode));
     struct treeNode *tn4 = malloc(sizeof(struct treeNode));
     struct treeNode *tn5 = malloc(sizeof(struct treeNode));
-    
+
     tn1->child = tn2;
     tn2->child = tn3;
     tn4->child = tn5;
@@ -418,8 +463,10 @@ void parseInputSourceCode(char *testcaseFile, int parseTable[NUM_NONTERM][NUM_TE
     tn5->sibling = NULL;
     tn1->sibling = NULL;
 
-    printParseTree(tn1, fp);
-
+    // printf("lexemeCurrentNode lineno tokenName valueIfNumber parentNodeSymbol isLeafNode(yes/no) nodeSymbol\n");
+    FILE *fp1 = fopen("outFile.txt", "w");
+    printParseTree(rootNode, fp1);
+    fclose(fp1);
 }
 
 int parser(char *testcasefile)
